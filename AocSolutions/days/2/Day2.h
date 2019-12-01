@@ -5,6 +5,10 @@
 
 class Day2 : public ISolutionDay
 {
+private:
+
+  vector<string> mData;
+
 public:
 
   Day2(){ }
@@ -13,20 +17,22 @@ public:
 
   void DoWork()
   {
-
+    mData = rff(KINPUT "2\\input.txt");
   }
   
   string Part1() override
   {
+    int ret = 0;
     DoWork();
 
-    return "10010";
+    return std::to_string(ret);
   }
 
   string Part2() override
   {
+    int ret = 0;
     DoWork();
 
-    return "";
+    return std::to_string(ret);
   }
 };

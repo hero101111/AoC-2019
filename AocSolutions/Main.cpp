@@ -27,16 +27,11 @@ int main(int argc, char** argv)
     cout << "Running Day " << dayToRun << " PART 2 " << endl;
     result = runner->Part2();
   }
+
+  cout << endl << endl << result << endl << endl << "copied to clipboard" << endl;
+
+  // store result in clipboard
   pic(result);
-
-  // ------------
-
-  int t = 0;
-  rff(KINPUT "1\\input.txt", [&t](string s) { int n = stoi(s); t += int(n / 3) - 2; });
-  cout << endl;
-  cout << t << endl;
- 
-  auto tokens = tok("first second 123");
 
   return 0;
 }

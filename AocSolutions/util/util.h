@@ -113,7 +113,7 @@ vector<string> rff(string filePath, function<void(string &)> func = nullptr)
   
   while (getline(f, s))
   {
-    func(s);
+    if (func != nullptr) func(s);
     ret.push_back(s);
   }
 
