@@ -10,6 +10,9 @@
 #include <sstream>
 #include <memory>
 #include <functional>
+#include <list>
+#include <deque>
+#include <algorithm>
 
 #include <Windows.h>
 

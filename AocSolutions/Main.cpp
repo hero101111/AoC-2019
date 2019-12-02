@@ -6,6 +6,13 @@
 
 using namespace std;
 
+// ##############################
+
+static int partControl = 11;
+
+  // ##############################
+
+
 int main(int argc, char** argv)
 {
   map<int, unique_ptr<ISolutionDay>> solutions;
@@ -13,10 +20,10 @@ int main(int argc, char** argv)
  
   int dayToRun = 2;
 
-  bool runPartOne = true;
-
   auto & runner = solutions[dayToRun];
   string result;
+
+  bool runPartOne = partControl == 1;
   if (runPartOne)
   {
     cout << "Running Day " << dayToRun << " PART 1 " << endl;

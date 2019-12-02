@@ -79,7 +79,7 @@ struct Point
 
 };
 
-vector<string> regexMatch(string s, string regex)
+vector<string> RegexMatch(string s, string regex)
 {
   std::regex re2(regex);
   std::smatch match2;
