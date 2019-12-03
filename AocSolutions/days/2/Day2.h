@@ -26,7 +26,7 @@ public:
   int DoWork(int a, int b)
   {
     vector<int> values(mData.size());
-    for (int i = 0; i < mData.size(); ++i)
+    for (size_t i = 0; i < mData.size(); ++i)
       values[i] = stoi(mData[i]);
 
     values[1] = a;

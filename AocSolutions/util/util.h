@@ -21,7 +21,7 @@ void pic(T v)
 
 struct Point
 {
-  int x, y;
+  int x{ 0 }, y{ 0 };
 
   bool operator ==(const Point& other) const
   {
@@ -43,7 +43,7 @@ struct Point
 
   Point Down() const
   {
-    return Point{ x, y + 1 };
+    return Point{ x, y - 1 };
   }
 
   Point Left() const
@@ -58,7 +58,7 @@ struct Point
 
   Point Up() const
   {
-    return Point{ x, y - 1 };
+    return Point{ x, y + 1 };
   }
 
   vector<Point> GetNeighbours() const
@@ -131,6 +131,11 @@ vector<string> tok(string str)
     ret.push_back(word);
 
   return ret;
+}
+
+int manhattan(int x1, int y1, int x2, int y2)
+{
+  return abs(x1 - x2) + abs(y1 - y2);
 }
 
 #define KINPUT "C:\\aoc-2019\\AocSolutions\\inputs\\Day"

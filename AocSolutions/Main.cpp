@@ -3,6 +3,7 @@
 #include "SolutionDay.h"
 
 #include "days/2/Day2.h"
+#include "days/3/Day3.h"
 
 using namespace std;
 
@@ -17,8 +18,9 @@ int main(int argc, char** argv)
 {
   map<int, unique_ptr<ISolutionDay>> solutions;
   solutions[2] = static_cast<unique_ptr<ISolutionDay>>(new Day2());
+  solutions[3] = static_cast<unique_ptr<ISolutionDay>>(new Day3());
  
-  int dayToRun = 2;
+  int dayToRun = 3;
 
   auto & runner = solutions[dayToRun];
   string result;
