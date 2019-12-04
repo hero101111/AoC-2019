@@ -1,3 +1,7 @@
+#pragma once
+
+#define NOMINMAX
+
 #include <iostream>
 #include <vector>
 #include <string>
@@ -13,6 +17,9 @@
 #include <list>
 #include <deque>
 #include <algorithm>
+#include <numeric>
+#include <limits>
+#include <queue>
 
 #include <Windows.h>
 

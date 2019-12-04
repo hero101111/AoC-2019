@@ -61,6 +61,22 @@ struct Point
     return Point{ x, y + 1 };
   }
 
+  Point FromOrientation(char orientation) const
+  {
+    switch (orientation)
+    {
+    case 'N':
+      return Up();
+    case 'E':
+      return Right();
+    case 'W':
+      return Left();
+    case 'S':
+      return Down();
+    }
+    return *this;
+  }
+
   vector<Point> GetNeighbours() const
   {
     vector<Point> ret;
@@ -77,6 +93,15 @@ struct Point
     return ret;
   }
 
+  int ManhattanDist(const Point& p) const
+  {
+    return abs(x - p.x) + abs(y - p.y);
+  }
+
+  bool IsInGrid(int width, int height) const
+  {
+    return x >= 0 && y >= 0 && x < width && y < height;
+  }
 };
 
 vector<string> RegexMatch(string s, string regex)
@@ -137,5 +162,205 @@ int manhattan(int x1, int y1, int x2, int y2)
 {
   return abs(x1 - x2) + abs(y1 - y2);
 }
+
+string tolower_str(string s)
+{
+  string newS = s;
+  transform(begin(newS), end(newS), begin(newS), ::tolower);
+  return newS;
+}
+
+template<class T>
+class DynamicMap
+{
+public:
+  using DT = unordered_map<int, unordered_map<int, T>>;
+
+  DT data;
+
+  int max_y = numeric_limits<int>::min();
+  int max_x = numeric_limits<int>::min();
+  int min_x = numeric_limits<int>::max();
+  int min_y = numeric_limits<int>::max();
+
+  bool at(Point p, T * aOutVal)
+  {
+    auto xData = data.find(p.x);
+    if (xData == end(data))
+      return false;
+    auto yData = xData->second.find(p.y);
+    if (yData == end(xData->second))
+      return false;
+
+    if (aOutVal != nullptr)
+      *aOutVal = yData->second;
+
+    return true;
+  }
+
+  void set(Point p, T value)
+  {
+    if (p.x < min_x)
+      min_x = p.x;
+    if (p.x > max_x)
+      max_x = p.x;
+    if (p.y < min_y)
+      min_y = p.y;
+    if (p.y > max_y)
+      max_y = p.y;
+
+    data[p.x][p.y] = value;
+  }
+
+  int width() const
+  {
+    return abs(max_x - min_x);
+  }
+
+  int height() const
+  {
+    return abs(max_y - min_y);
+  }
+};
+
+//--------------------------------------
+
+template <>
+struct hash<Point>
+{
+  std::size_t operator()(const Point& k) const
+  {
+    return k.y * 10000 + k.x;
+  }
+};
+
+template<class T>
+class Dijkstra
+{
+public:
+
+  DynamicMap<T>& mData;
+
+  Dijkstra(DynamicMap<T>& data) : mData(data) { }
+
+  void GetNeighbours(const Point& p, vector<Point>& ret)
+  {
+    ret.clear();
+    Point east = p.FromOrientation('E');
+    Point west = p.FromOrientation('W');
+    Point north = p.FromOrientation('N');
+    Point south = p.FromOrientation('S');
+
+    /*if (!IsWall(east)) ret.push_back(east);
+    if (!IsWall(west)) ret.push_back(west);
+    if (!IsWall(north)) ret.push_back(north);
+    if (!IsWall(south)) ret.push_back(south);*/
+  }
+
+  unordered_map<Point, int> dist;
+  unordered_map<Point, Point> prevPoint;
+
+  struct MinQueuePred
+  {
+    Dijkstra& mDij;
+
+    MinQueuePred(Dijkstra& main)
+      : mDij(main)
+    {
+    }
+
+    bool operator()(const Point& a, const Point& b) const
+    {
+      int da = mDij.dist[a];
+      int db = mDij.dist[b];
+      bool bb = da < db;
+      if (bb)
+        return true;
+      if (da == db)
+        return a < b;
+
+      return bb;
+    }
+  };
+
+  void FillPaths(const Point& from)
+  {
+    queue<Point> Q;
+    unordered_map<Point, int> visitData;
+
+    Q.push(from);
+    visitData[from] = 0;
+
+    vector<Point> neighbours;
+    while (!Q.empty())
+    {
+      Point curr = Q.front();
+      Q.pop();
+      int currD = visitData[curr];
+      GetNeighbours(curr, neighbours);
+      for (auto& n : neighbours)
+      {
+        if (true)//(!IsWall(n) && visitData.find(n) == end(visitData))
+        {
+          visitData[n] = currD;//+ (IsDoorAt(n) ? 1 : 0);
+          Q.push(n);
+        }
+      }
+    }
+
+    /*auto maxE = max_element(begin(visitData), end(visitData), [](auto& e1, auto& e2) { return e1.second < e2.second; });
+    cout << maxE->second << endl;
+
+    auto acc = count_if(begin(visitData), end(visitData), [&](auto& e) { return IsRoomAt(e.first) && e.second >= 1000; });
+
+    cout << acc << endl;*/
+  }
+
+  void  RunPaths(const Point& from)
+  {
+    multiset<Point, MinQueuePred> Q;
+    vector<Point> neigh;
+    Q.clear();
+
+    for (int x = mData.min_x; x <= mData.max_x; ++x)
+    {
+      for (int y = mData.min_y; y <= mData.max_y; ++y)
+      {
+        Point p{ x, y };
+        if (!mData.at(p)) // xxx
+          continue;
+
+        dist[p] = numeric_limits<int>::max() - 1;
+        if (x == from.x && y == from.y)
+          dist[p] = 0;
+        prevPoint[p] = { numeric_limits<int>::max(), numeric_limits<int>::max() };
+        Q.insert(p);
+      }
+    }
+
+    while (!Q.empty())
+    {
+      Point u = *Q.begin();
+      Q.erase(Q.begin());
+
+      GetNeighbours(u, neigh);
+
+      for (auto v : neigh)
+      {
+        int alt = dist[u] + 1;
+        if (alt < dist[v])
+        {
+          dist[v] = alt;
+          prevPoint[v] = u;
+
+          Q.erase(v);
+          Q.insert(v);
+        }
+      }
+    }
+  }
+};
+
+//--------------------------------------
 
 #define KINPUT "C:\\aoc-2019\\AocSolutions\\inputs\\Day"
