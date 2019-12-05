@@ -5,6 +5,7 @@
 #include "days/2/Day2.h"
 #include "days/3/Day3.h"
 #include "days/4/Day4.h"
+#include "days/5/Day5.h"
 
 using namespace std;
 
@@ -21,8 +22,9 @@ int main(int argc, char** argv)
   solutions[2] = static_cast<unique_ptr<ISolutionDay>>(new Day2());
   solutions[3] = static_cast<unique_ptr<ISolutionDay>>(new Day3());
   solutions[4] = static_cast<unique_ptr<ISolutionDay>>(new Day4());
+  solutions[5] = static_cast<unique_ptr<ISolutionDay>>(new Day5());
  
-  int dayToRun = 4;
+  int dayToRun = 5;
 
   auto & runner = solutions[dayToRun];
   string result;

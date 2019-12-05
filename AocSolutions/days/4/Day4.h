@@ -33,7 +33,7 @@ public:
       auto digits = GetDigits(n);
       bool hasAdjacent = false;
 
-      for (int i = 0; i < digits.size() - 1; ++i)
+      for (size_t i = 0; i < digits.size() - 1; ++i)
       {
         int crtDigit = digits[i];
         if (crtDigit > digits[i + 1])
@@ -69,12 +69,12 @@ public:
       auto digits = GetDigits(n);
       bool hasAdjacent = false;
 
-      for (int i = 0; i < digits.size() - 1;++i)
+      for (size_t i = 0; i < digits.size() - 1;++i)
       {
         if (digits[i] > digits[i + 1])
           return false;
       }
-      for (int i = 0; i < digits.size() - 1;)
+      for (size_t i = 0; i < digits.size() - 1;)
       {
         int crtDigit = digits[i];
         if (i > 0 && crtDigit != digits[i - 1] && hasAdjacent)
@@ -122,3 +122,4 @@ public:
     return std::to_string(count);
   }
 };
+
