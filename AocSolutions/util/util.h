@@ -115,6 +115,12 @@ vector<string> RegexMatch(string s, string regex)
   return ret;
 }
 
+string RegexReplace(string s, string rgx, string replace)
+{
+  regex re(rgx);
+  return regex_replace(s, re, replace);
+}
+
 vector<int> GetDigits(int n)
 {
   if (n == 0)
@@ -145,17 +151,36 @@ vector<string> rff(string filePath, function<void(string &)> func = nullptr)
   return ret;
 }
 
-vector<string> tok(string str)
+vector<string> tok(string str, char sep = ' ')
 {
   stringstream s(str); // Used for breaking words 
   string word; // to store individual words 
 
   vector<string> ret;
 
-  while (s >> word)
+  while (getline(s, word, sep))
     ret.push_back(word);
 
   return ret;
+}
+
+string ltrim(string str)
+{
+  while (!str.empty() && str.front() == ' ')
+    str.erase(begin(str));
+  return str;
+}
+
+string rtrim(string str)
+{
+  while (!str.empty() && str.back() == ' ')
+    str.pop_back();
+  return str;
+}
+
+string trim(string str)
+{
+  return ltrim(rtrim(str));
 }
 
 int manhattan(int x1, int y1, int x2, int y2)
@@ -168,6 +193,16 @@ string tolower_str(string s)
   string newS = s;
   transform(begin(newS), end(newS), begin(newS), ::tolower);
   return newS;
+}
+
+string replacestr(string str, const string & search, string replace) {
+  size_t pos = 0;
+  while ((pos = str.find(search, pos)) != std::string::npos) 
+  {
+    str.replace(pos, search.length(), replace);
+    pos += replace.length();
+  }
+  return str;
 }
 
 template<class T>
@@ -220,6 +255,31 @@ public:
   int height() const
   {
     return abs(max_y - min_y);
+  }
+
+  void printf(string filePath, char empty= ' ', bool append = false, string prologue = "")
+  {
+    ofstream fOut;
+    fOut.open(filePath, append ? ios_base::app : ios_base::out);
+
+    if(append)
+      fOut << endl;
+    if (prologue.size() > 0)
+      fOut << prologue << endl;
+
+    for (int i = min_x; i <= max_x; ++i)
+    {
+      for (int j = min_y; j <= max_y; ++j)
+      {
+        T data;
+        if (!at({ i, j }, &data))
+          data = empty;
+
+        fOut << data;
+      }
+      fOut << endl;
+    }
+    fOut.close();
   }
 };
 
@@ -364,3 +424,4 @@ public:
 //--------------------------------------
 
 #define KINPUT "C:\\aoc-2019\\AocSolutions\\inputs\\Day"
+#define KOUTPUT "C:\\aoc-2019\\AocSolutions\\output\\"

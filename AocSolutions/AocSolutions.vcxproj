@@ -141,6 +141,7 @@
     <ClInclude Include="days\3\Day3.h" />
     <ClInclude Include="days\4\Day4.h" />
     <ClInclude Include="days\5\Day5.h" />
+    <ClInclude Include="days\6\Day6.h" />
     <ClInclude Include="SolutionDay.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="util\util.h" />

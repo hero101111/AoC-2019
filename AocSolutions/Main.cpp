@@ -6,12 +6,13 @@
 #include "days/3/Day3.h"
 #include "days/4/Day4.h"
 #include "days/5/Day5.h"
+#include "days/6/Day6.h"
 
 using namespace std;
 
 // ##############################
 
-static int partControl = 1;
+static int partControl = 2;
 
   // ##############################
 
@@ -19,12 +20,14 @@ static int partControl = 1;
 int main(int argc, char** argv)
 {
   map<int, unique_ptr<ISolutionDay>> solutions;
-  solutions[2] = static_cast<unique_ptr<ISolutionDay>>(new Day2());
-  solutions[3] = static_cast<unique_ptr<ISolutionDay>>(new Day3());
-  solutions[4] = static_cast<unique_ptr<ISolutionDay>>(new Day4());
-  solutions[5] = static_cast<unique_ptr<ISolutionDay>>(new Day5());
+  size_t crtDay = 2;
+  solutions[crtDay++] = static_cast<unique_ptr<ISolutionDay>>(new Day2());
+  solutions[crtDay++] = static_cast<unique_ptr<ISolutionDay>>(new Day3());
+  solutions[crtDay++] = static_cast<unique_ptr<ISolutionDay>>(new Day4());
+  solutions[crtDay++] = static_cast<unique_ptr<ISolutionDay>>(new Day5());
+  solutions[crtDay++] = static_cast<unique_ptr<ISolutionDay>>(new Day6());
  
-  int dayToRun = 5;
+  int dayToRun = 6;
 
   auto & runner = solutions[dayToRun];
   string result;
