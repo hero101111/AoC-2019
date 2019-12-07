@@ -17,133 +17,7 @@ public:
 
   ~Day7() override { }
 
-  int Compute(vector<int> & values, int phase, int input, int & output)
-  {
-    vector<int>& memory = values;
-
-    int & ret = output;
-    bool readPhase = false;
-
-    auto it = values.begin();
-    while (it != values.end())
-    {
-      int instr = 0;
-      int mode1 = 0;
-      int mode2 = 0;
-      {
-        auto digits = GetDigits(*it);
-        instr = digits.back();
-        digits.pop_back();
-        if (!digits.empty())
-        {
-          instr = digits.back() * 10 + instr;
-          digits.pop_back();
-        }
-        if (!digits.empty())
-        {
-          mode1 = digits.back();
-          digits.pop_back();
-        }
-        if (!digits.empty())
-        {
-          mode2 = digits.back();
-          digits.pop_back();
-        }
-      }
-
-      if (instr == 99)
-        break;
-      if (instr == 1)
-      {
-        int pos1 = *++it;
-        int pos2 = *++it;
-        int where = *++it;
-
-        int v1 = mode1 == 0 ? memory[pos1] : pos1;
-        int v2 = mode2 == 0 ? memory[pos2] : pos2;
-        memory[where] = v1 + v2;
-      }
-      if (instr == 2)
-      {
-        int pos1 = *++it;
-        int pos2 = *++it;
-        int where = *++it;
-        int v1 = mode1 == 0 ? memory[pos1] : pos1;
-        int v2 = mode2 == 0 ? memory[pos2] : pos2;
-        memory[where] = v1 * v2;
-      }
-      if (instr == 3)
-      {
-        int pos1 = *++it;
-        if (readPhase)
-          memory[pos1] = input;
-        else
-        {
-          memory[pos1] = phase;
-          readPhase = true;
-        }
-      }
-      if (instr == 4)
-      {
-        int pos1 = *++it;
-        int v = mode1 == 0 ? memory[pos1] : pos1;
-        ret = v;
-      }
-      if (instr == 5)
-      {
-        int pos1 = *++it;
-        int pos2 = *++it;
-        int v1 = mode1 == 0 ? memory[pos1] : pos1;
-        int v2 = mode2 == 0 ? memory[pos2] : pos2;
-        if (v1 != 0)
-        {
-          it = values.begin() + v2;
-          continue;
-        }
-      }
-      if (instr == 6)
-      {
-        int pos1 = *++it;
-        int pos2 = *++it;
-        int v1 = mode1 == 0 ? memory[pos1] : pos1;
-        int v2 = mode2 == 0 ? memory[pos2] : pos2;
-        if (v1 == 0)
-        {
-          it = values.begin() + v2;
-          continue;
-        }
-      }
-      if (instr == 7)
-      {
-        int pos1 = *++it;
-        int pos2 = *++it;
-        int pos3 = *++it;
-        int v1 = mode1 == 0 ? memory[pos1] : pos1;
-        int v2 = mode2 == 0 ? memory[pos2] : pos2;
-
-        memory[pos3] = (int)(v1 < v2);
-
-      }
-      if (instr == 8)
-      {
-        int pos1 = *++it;
-        int pos2 = *++it;
-        int pos3 = *++it;
-        int v1 = mode1 == 0 ? memory[pos1] : pos1;
-        int v2 = mode2 == 0 ? memory[pos2] : pos2;
-
-        memory[pos3] = (int)(v1 == v2);
-      }
-
-      it++;
-      if (it == values.end())
-        break;
-    }
-
-    return ret;
-  }
-
-  int Compute2(vector<int>& values, int phase, int input, int& output, bool & stopped, int instrOffset = 0)
+  int Compute(vector<int>& values, int phase, int input, int& output, bool & stopped, bool suspendAtOutput = false, int instrOffset = 0)
   {
     vector<int>& memory = values;
 
@@ -218,8 +92,11 @@ public:
         int pos1 = *++it;
         int v = mode1 == 0 ? memory[pos1] : pos1;
         ret = v;
-        stopped = false;
-        return it - begin(values);
+        if (suspendAtOutput)
+        {
+          stopped = false;
+          return it - begin(values);
+        }
       }
       if (instr == 5)
       {
@@ -290,7 +167,8 @@ public:
       values[i] = stoi(mdata[i]);
     
     int output = 0;
-    return Compute(values, phase, input, output);
+    bool stopped = false; // useful only for part 2
+    return Compute(values, phase, input, output, stopped, false, 0);
   }
 
   int Simulate(int a, int b, int c, int d, int e)
@@ -326,11 +204,11 @@ public:
     bool stopA = false, stopB = false, stopC = false, stopD = false, stopE = false;
     while (true)
     {
-      offsetA = Compute2(valuesA, a, outE, outA, stopA, offsetA);
-      offsetB = Compute2(valuesB, b, outA, outB, stopB, offsetB);
-      offsetC = Compute2(valuesC, c, outB, outC, stopC, offsetC);
-      offsetD = Compute2(valuesD, d, outC, outD, stopD, offsetD);
-      offsetE = Compute2(valuesE, e, outD, outE, stopE, offsetE);
+      offsetA = Compute(valuesA, a, outE, outA, stopA, true, offsetA);
+      offsetB = Compute(valuesB, b, outA, outB, stopB, true, offsetB);
+      offsetC = Compute(valuesC, c, outB, outC, stopC, true, offsetC);
+      offsetD = Compute(valuesD, d, outC, outD, stopD, true, offsetD);
+      offsetE = Compute(valuesE, e, outD, outE, stopE, true, offsetE);
       
       if (stopA && stopB && stopC && stopD && stopE)
       {
@@ -338,7 +216,6 @@ public:
         break;
       }
     }
-
     
     return val;
   }
