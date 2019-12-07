@@ -8,11 +8,12 @@
 #include "days/5/Day5.h"
 #include "days/6/Day6.h"
 #include "days/7/Day7.h"
+#include "days/8/Day8.h"
 
 using namespace std;
 
 /////////////////////////////////
-static int partControl = 11;
+static int partControl = 1;
 /////////////////////////////////
 
 
@@ -26,9 +27,10 @@ int main(int argc, char** argv)
   solutions[crtDay++] = static_cast<unique_ptr<ISolutionDay>>(new Day5());
   solutions[crtDay++] = static_cast<unique_ptr<ISolutionDay>>(new Day6());
   solutions[crtDay++] = static_cast<unique_ptr<ISolutionDay>>(new Day7());
+  solutions[crtDay++] = static_cast<unique_ptr<ISolutionDay>>(new Day8());
  
   ///////////////////////////////
-  int dayToRun = 7;
+  int dayToRun = 8;
   ///////////////////////////////
 
   auto & runner = solutions[dayToRun];

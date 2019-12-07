@@ -66,12 +66,36 @@ struct Point
     switch (orientation)
     {
     case 'N':
+    case 'n':
       return Up();
+    case 'e':
     case 'E':
       return Right();
+    case 'w':
     case 'W':
       return Left();
+    case 's':
     case 'S':
+      return Down();
+    }
+    return *this;
+  }
+
+  Point FromDirection(char orientation) const
+  {
+    switch (orientation)
+    {
+    case 'u':
+    case 'U':
+      return Up();
+    case 'r':
+    case 'R':
+      return Right();
+    case 'l':
+    case 'L':
+      return Left();
+    case 'd':
+    case 'D':
       return Down();
     }
     return *this;
@@ -233,21 +257,6 @@ public:
     return true;
   }
 
-  /*T operator [](int p, T* aOutVal)
-  {
-    auto xData = data.find(p.x);
-    if (xData == end(data))
-      return false;
-    auto yData = xData->second.find(p.y);
-    if (yData == end(xData->second))
-      return false;
-
-    if (aOutVal != nullptr)
-      *aOutVal = yData->second;
-
-    return true;
-  }*/
-
   void set(Point p, T value)
   {
     if (p.x < min_x)
@@ -262,14 +271,33 @@ public:
     data[p.x][p.y] = value;
   }
 
+  vector<int> range_x() const
+  {
+    vector<int> ret(width());
+    iota(begin(ret), end(ret), min_x);
+    return ret;
+  }
+
+  vector<int> range_y() const
+  {
+    vector<int> ret(height());
+    iota(begin(ret), end(ret), min_y);
+    return ret;
+  }
+
+  bool empty() const
+  {
+    return data.empty();
+  }
+
   int width() const
   {
-    return abs(max_x - min_x);
+    return abs(max_x - min_x) + 1;
   }
 
   int height() const
   {
-    return abs(max_y - min_y);
+    return abs(max_y - min_y) + 1;
   }
 
   void printf(string filePath, char empty= ' ', bool append = false, string prologue = "")
@@ -303,15 +331,7 @@ struct objmap
 {
   int crtIndex{ 0 };
   unordered_map<T, int> mapping;
-
-  int operator() (const T & obj) {
-    auto found = mapping.find(obj);
-    if (found != mapping.end())
-      return found->second;
-    else
-      return -1;
-  }
-
+  
   int add(const T& obj)
   {
     auto found = mapping.find(obj);
@@ -322,6 +342,16 @@ struct objmap
       mapping[obj] = crtIndex;
       return crtIndex++;
     }
+  }
+
+  int operator() (const T& obj) 
+  {
+    return add(obj);
+  }
+
+  int operator [](const T& obj)
+  {
+    return add(obj);
   }
 };
 
@@ -337,177 +367,168 @@ struct hash<Point>
 };
 
 template<class T>
-class Dijkstra
+void printvec(vector<T>& v)
 {
+  cout << endl;
+  for (auto& el : v)
+    cout << el << " ";
+}
+
+template<class T>
+void printset(set<T>& v)
+{
+  cout << endl;
+  for (auto& el : v)
+    cout << el << " ";
+}
+
+template<class T>
+void printset(unordered_set<T>& v)
+{
+  cout << endl;
+  for (auto& el : v)
+    cout << el << " ";
+}
+
+template<class T, class U>
+void printmap(map<T, U>& m)
+{
+  cout << endl;
+  for (auto& el : m)
+  {
+    cout << "[" << el.first << "] = " << el.second << endl;
+  }
+}
+
+template<class T, class U>
+void printmap(unordered_map<T, U>& m)
+{
+  cout << endl;
+  for (auto& el : m)
+  {
+    cout << "[" << el.first << "] = " << el.second << endl;
+  }
+}
+
+class Graph
+{
+
+  typedef pair<int, int> WeightNodePair;
+
+  int vertexCount;
+
+  vector<list< pair<int, int>>> adjacency;
+
 public:
 
-  DynamicMap<T>& mData;
-
-  Dijkstra(DynamicMap<T>& data) : mData(data) { }
-
-  void GetNeighbours(const Point& p, vector<Point>& ret)
+  Graph(int aVertexCount)
   {
-    ret.clear();
-    Point east = p.FromOrientation('E');
-    Point west = p.FromOrientation('W');
-    Point north = p.FromOrientation('N');
-    Point south = p.FromOrientation('S');
-
-    /*if (!IsWall(east)) ret.push_back(east);
-    if (!IsWall(west)) ret.push_back(west);
-    if (!IsWall(north)) ret.push_back(north);
-    if (!IsWall(south)) ret.push_back(south);*/
+    this->vertexCount = aVertexCount;
+    adjacency.resize(aVertexCount);
   }
 
-  unordered_map<Point, int> dist;
-  unordered_map<Point, Point> prevPoint;
-
-  struct MinQueuePred
+  void AddEdge(int node1, int node2, int weight)
   {
-    Dijkstra& mDij;
+    adjacency[node1].push_back(make_pair(node2, weight));
+    adjacency[node2].push_back(make_pair(node1, weight));
+  }
 
-    MinQueuePred(Dijkstra& main)
-      : mDij(main)
-    {
-    }
-
-    bool operator()(const Point& a, const Point& b) const
-    {
-      int da = mDij.dist[a];
-      int db = mDij.dist[b];
-      bool bb = da < db;
-      if (bb)
-        return true;
-      if (da == db)
-        return a < b;
-
-      return bb;
-    }
-  };
-
-  void FillPaths(const Point& from)
+  void AddAdjacencyMatrix(DynamicMap<int>& aMap)
   {
-    queue<Point> Q;
-    unordered_map<Point, int> visitData;
-
-    Q.push(from);
-    visitData[from] = 0;
-
-    vector<Point> neighbours;
-    while (!Q.empty())
+    for (int i = aMap.min_x; i <= aMap.max_x; ++i)
     {
-      Point curr = Q.front();
-      Q.pop();
-      int currD = visitData[curr];
-      GetNeighbours(curr, neighbours);
-      for (auto& n : neighbours)
+      for (int j = aMap.min_y; j <= aMap.max_y; ++j)
       {
-        if (true)//(!IsWall(n) && visitData.find(n) == end(visitData))
+        int val = 0;
+        if (aMap.at({ i , j }, &val))
         {
-          visitData[n] = currD;//+ (IsDoorAt(n) ? 1 : 0);
-          Q.push(n);
+          if (val > 0)
+          {
+            AddEdge(i, j, val);
+          }
+        }
+      }
+    }
+  }
+
+  map<int, int> GetDistances(int src)
+  {
+    priority_queue<WeightNodePair, vector<WeightNodePair>, greater<WeightNodePair>> pq;
+
+    vector<int> dist(vertexCount, numeric_limits<int>::max() - 1);
+
+    pq.push(make_pair(0, src));
+    dist[src] = 0;
+
+    while (!pq.empty())
+    {
+      int u = pq.top().second;
+      pq.pop();
+
+      for (auto i = adjacency[u].begin(); i != adjacency[u].end(); ++i)
+      {
+        int v = (*i).first;
+        int weight = (*i).second;
+
+        if (dist[v] > dist[u] + weight)
+        {
+          dist[v] = dist[u] + weight;
+          pq.push(make_pair(dist[v], v));
         }
       }
     }
 
-    /*auto maxE = max_element(begin(visitData), end(visitData), [](auto& e1, auto& e2) { return e1.second < e2.second; });
-    cout << maxE->second << endl;
-
-    auto acc = count_if(begin(visitData), end(visitData), [&](auto& e) { return IsRoomAt(e.first) && e.second >= 1000; });
-
-    cout << acc << endl;*/
+    map<int, int> distanceMap;
+    for (int i = 0; i < vertexCount; ++i)
+      distanceMap[i] = dist[i];
+    return distanceMap;
   }
 
-  void  RunPaths(const Point& from)
+  vector<int> GetShortestPath(int src, int dest)
   {
-    multiset<Point, MinQueuePred> Q;
-    vector<Point> neigh;
-    Q.clear();
+    priority_queue<WeightNodePair, vector<WeightNodePair>, greater<WeightNodePair>> pq;
 
-    for (int x = mData.min_x; x <= mData.max_x; ++x)
+    vector<int> dist(vertexCount, numeric_limits<int>::max() - 1);
+    vector<int> prev( vertexCount, -1 );
+
+    pq.push(make_pair(0, src));
+    dist[src] = 0;
+
+    while (!pq.empty())
     {
-      for (int y = mData.min_y; y <= mData.max_y; ++y)
+      int u = pq.top().second;
+      pq.pop();
+      if (u == dest)
+        break;
+
+      for (auto i = adjacency[u].begin(); i != adjacency[u].end(); ++i)
       {
-        Point p{ x, y };
-        if (!mData.at(p)) // xxx
-          continue;
+        int v = (*i).first;
+        int weight = (*i).second;
 
-        dist[p] = numeric_limits<int>::max() - 1;
-        if (x == from.x && y == from.y)
-          dist[p] = 0;
-        prevPoint[p] = { numeric_limits<int>::max(), numeric_limits<int>::max() };
-        Q.insert(p);
-      }
-    }
-
-    while (!Q.empty())
-    {
-      Point u = *Q.begin();
-      Q.erase(Q.begin());
-
-      GetNeighbours(u, neigh);
-
-      for (auto v : neigh)
-      {
-        int alt = dist[u] + 1;
-        if (alt < dist[v])
+        if (dist[v] > dist[u] + weight)
         {
-          dist[v] = alt;
-          prevPoint[v] = u;
-
-          Q.erase(v);
-          Q.insert(v);
+          dist[v] = dist[u] + weight;
+          pq.push(make_pair(dist[v], v));
+          prev[v] = u;
         }
       }
     }
+
+    vector<int> retNodes;
+    int u = dest;
+    while (prev[u] >= 0 || u == src)
+    {
+      retNodes.insert(begin(retNodes), u);
+      u = prev[u];
+      if (u < 0)
+        break;
+    }
+
+    return retNodes;
   }
 };
 
-struct Lee
-{
-  DynamicMap<int>& mdata;
-
-  queue<int> X, Y; // the queues used to get the positions in the matrix
-
-  Lee(DynamicMap<int>& data, int start_x, int start_y)
-    : mdata(data)
-  {
-    X.push(start_x); //initialize the queues with the start position
-    Y.push(start_y);
-  }
-
-  void operator()()
-  {
-    int dl[]{ -1, 0, 1, 0 }; // these arrays will help you travel in the 4 directions more easily
-    int dc[]{ 0, 1, 0, -1 };
-
-    int x, y, xx, yy;
-    while (!X.empty()) // while there are still positions in the queue
-    {
-      x = X.front(); // set the current position
-      y = Y.front();
-      for (int i = 0; i < 4; i++)
-      {
-        xx = x + dl[i]; // travel in an adiacent cell from the current position
-        yy = y + dc[i];
-
-        //'position is valid' XXX
-        if (1) //here you should insert whatever conditions should apply for your position (xx, yy)
-        {
-          X.push(xx); // add the position to the queue
-          Y.push(yy);
-          mdata.set({ xx,yy }, -1); // you usually mark that you have been to this position in the matrix
-        }
-
-      }
-
-      X.pop(); // eliminate the first position, as you have no more use for it
-      Y.pop();
-    }
-
-
-  }
-};
 
 //--------------------------------------
 

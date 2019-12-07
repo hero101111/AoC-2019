@@ -50,5 +50,8 @@
     <ClInclude Include="days\7\Day7.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="days\8\Day8.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
