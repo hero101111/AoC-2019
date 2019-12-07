@@ -9,8 +9,6 @@ private:
 
   vector<string> mdata;
 
-  objmap<string> mapping;
-
 public:
 
   Day7(){ }
@@ -184,18 +182,12 @@ public:
   int Simulate2(int a, int b, int c, int d, int e)
   {
     vector<int> valuesA(mdata.size());
-    vector<int> valuesB(mdata.size());
-    vector<int> valuesC(mdata.size());
-    vector<int> valuesD(mdata.size());
-    vector<int> valuesE(mdata.size());
     for (size_t i = 0; i < mdata.size(); ++i)
-    {
       valuesA[i] = stoi(mdata[i]);
-      valuesB[i] = stoi(mdata[i]);
-      valuesC[i] = stoi(mdata[i]);
-      valuesD[i] = stoi(mdata[i]);
-      valuesE[i] = stoi(mdata[i]);
-    }
+    vector<int> valuesB = valuesA;
+    vector<int> valuesC = valuesA;
+    vector<int> valuesD = valuesA;
+    vector<int> valuesE = valuesA;
 
     int val = 0;
 
@@ -223,19 +215,15 @@ public:
   int DoWorkPart1()
   {
     int maxval = numeric_limits<int>::min();
-    for (int a = 0; a < 5; ++a)
-      for (int b = 0; b < 5; ++b)
-        for (int c = 0; c < 5; ++c)
-          for (int d = 0; d < 5; ++d)
-            for (int e = 0; e < 5; ++e)
-            {
-              if (a != b && b != c && c != d && d != e && a != c && a != d && a != e && b != d && b != e && c != e)
-              {
-                int val = Simulate(a, b, c, d, e);
-                if (val > maxval)
-                  maxval = val;
-              }
-            }
+
+    vector<int> phases = { 0, 1, 2, 3, 4 };
+    
+    while (next_permutation(begin(phases), end(phases)))
+    {
+      int val = Simulate(phases[0], phases[1], phases[2], phases[3], phases[4]);
+      if (val > maxval)
+        maxval = val;
+    }
 
     return maxval;
   }
@@ -243,20 +231,14 @@ public:
   int DoWorkPart2()
   {
     int maxval = numeric_limits<int>::min();
-    for (int a = 5; a <= 9; ++a)
-      for (int b = 5; b <= 9; ++b)
-        for (int c = 5; c <= 9; ++c)
-          for (int d = 5; d <= 9; ++d)
-            for (int e = 5; e <= 9; ++e)
-            {
-              if (a != b && b != c && c != d && d != e && a != c && a != d && a != e && b != d && b != e && c != e)
-              {
-                int val = Simulate2(a, b, c, d, e);
+    vector<int> phases = { 5, 6, 7, 8, 9 };
 
-                if (val > maxval)
-                  maxval = val;
-              }
-            }
+    while (next_permutation(begin(phases), end(phases)))
+    {
+      int val = Simulate2(phases[0], phases[1], phases[2], phases[3], phases[4]);
+      if (val > maxval)
+        maxval = val;
+    }
 
     return maxval;
   }
@@ -264,16 +246,12 @@ public:
   string Part1() override
   {
     ReadData();
-    int maxval = DoWorkPart1();
-
-    return std::to_string(maxval);
+    return std::to_string(DoWorkPart1());
   }
   
   string Part2() override
   {
     ReadData();
-    int maxval = DoWorkPart2();
-
-    return std::to_string(maxval);
+    return std::to_string(DoWorkPart2());
   }
 };
