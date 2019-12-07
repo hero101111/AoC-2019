@@ -233,6 +233,21 @@ public:
     return true;
   }
 
+  /*T operator [](int p, T* aOutVal)
+  {
+    auto xData = data.find(p.x);
+    if (xData == end(data))
+      return false;
+    auto yData = xData->second.find(p.y);
+    if (yData == end(xData->second))
+      return false;
+
+    if (aOutVal != nullptr)
+      *aOutVal = yData->second;
+
+    return true;
+  }*/
+
   void set(Point p, T value)
   {
     if (p.x < min_x)
@@ -280,6 +295,33 @@ public:
       fOut << endl;
     }
     fOut.close();
+  }
+};
+
+template<class T>
+struct objmap
+{
+  int crtIndex{ 0 };
+  unordered_map<T, int> mapping;
+
+  int operator() (const T & obj) {
+    auto found = mapping.find(obj);
+    if (found != mapping.end())
+      return found->second;
+    else
+      return -1;
+  }
+
+  int add(const T& obj)
+  {
+    auto found = mapping.find(obj);
+    if (found != mapping.end())
+      return found->second;
+    else
+    {
+      mapping[obj] = crtIndex;
+      return crtIndex++;
+    }
   }
 };
 
@@ -418,6 +460,52 @@ public:
         }
       }
     }
+  }
+};
+
+struct Lee
+{
+  DynamicMap<int>& mdata;
+
+  queue<int> X, Y; // the queues used to get the positions in the matrix
+
+  Lee(DynamicMap<int>& data, int start_x, int start_y)
+    : mdata(data)
+  {
+    X.push(start_x); //initialize the queues with the start position
+    Y.push(start_y);
+  }
+
+  void operator()()
+  {
+    int dl[]{ -1, 0, 1, 0 }; // these arrays will help you travel in the 4 directions more easily
+    int dc[]{ 0, 1, 0, -1 };
+
+    int x, y, xx, yy;
+    while (!X.empty()) // while there are still positions in the queue
+    {
+      x = X.front(); // set the current position
+      y = Y.front();
+      for (int i = 0; i < 4; i++)
+      {
+        xx = x + dl[i]; // travel in an adiacent cell from the current position
+        yy = y + dc[i];
+
+        //'position is valid' XXX
+        if (1) //here you should insert whatever conditions should apply for your position (xx, yy)
+        {
+          X.push(xx); // add the position to the queue
+          Y.push(yy);
+          mdata.set({ xx,yy }, -1); // you usually mark that you have been to this position in the matrix
+        }
+
+      }
+
+      X.pop(); // eliminate the first position, as you have no more use for it
+      Y.pop();
+    }
+
+
   }
 };
 
