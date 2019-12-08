@@ -20,6 +20,7 @@
 #include <numeric>
 #include <limits>
 #include <queue>
+#include <stack>
 
 #include <Windows.h>
 

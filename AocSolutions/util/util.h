@@ -353,6 +353,14 @@ struct objmap
   {
     return add(obj);
   }
+
+  T translate(int index)
+  {
+    for (auto m : mapping)
+      if (m.second == index)
+        return m.first;
+    return T();
+  }
 };
 
 //--------------------------------------
@@ -365,6 +373,13 @@ struct hash<Point>
     return k.y * 10000 + k.x;
   }
 };
+
+vector<int> rangeint(int from, int to)
+{
+  vector<int> ret(to - from + 1);
+  iota(begin(ret), end(ret), from);
+  return ret;
+}
 
 template<class T>
 void printvec(vector<T>& v)
@@ -419,6 +434,22 @@ class Graph
 
   vector<list< pair<int, int>>> adjacency;
 
+  void DoTopoSort(int v, bool visited[],
+    stack<int>& Stack)
+  {
+    // Mark the current node as visited. 
+    visited[v] = true;
+
+    // Recur for all the vertices adjacent to this vertex 
+    list<pair<int, int>>::iterator i;
+    for (i = adjacency[v].begin(); i != adjacency[v].end(); ++i)
+      if (!visited[i->first])
+        DoTopoSort(i->first, visited, Stack);
+
+    // Push current vertex to stack which stores result 
+    Stack.push(v);
+  }
+
 public:
 
   Graph(int aVertexCount)
@@ -433,8 +464,33 @@ public:
     adjacency[node2].push_back(make_pair(node1, weight));
   }
 
+  void ClearEdge(int node1, int node2)
+  {
+    for (auto node1edge = adjacency[node1].begin(); 
+         node1edge != adjacency[node1].end(); node1edge++)
+    {
+      if (node1edge->first == node2)
+      {
+        adjacency[node1].erase(node1edge);
+        break;
+      }
+    }
+    for (auto node2edge = adjacency[node2].begin(); 
+         node2edge != adjacency[node2].end(); node2edge++)
+    {
+      if (node2edge->first == node1)
+      {
+        adjacency[node2].erase(node2edge);
+        break;
+      }
+    }
+  }
+
   void AddAdjacencyMatrix(DynamicMap<int>& aMap)
   {
+    adjacency.clear();
+    adjacency.resize(vertexCount);
+
     for (int i = aMap.min_x; i <= aMap.max_x; ++i)
     {
       for (int j = aMap.min_y; j <= aMap.max_y; ++j)
@@ -526,6 +582,30 @@ public:
     }
 
     return retNodes;
+  }
+
+  vector<int> SortTopologically()
+  {
+    stack<int> Stack;
+
+    // Mark all the vertices as not visited 
+    bool* visited = new bool[vertexCount];
+    for (int i = 0; i < vertexCount; i++)
+      visited[i] = false;
+
+    // Call the recursive helper function to store Topological 
+    // Sort starting from all vertices one by one 
+    for (int i = 0; i < vertexCount; i++)
+      if (visited[i] == false)
+        DoTopoSort(i, visited, Stack);
+
+    vector<int> ret;
+    // Print contents of stack 
+    while (Stack.empty() == false) {
+      ret.push_back(Stack.top());
+      Stack.pop();
+    }
+    return ret;
   }
 };
 

@@ -13,6 +13,9 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Header Files\Week1">
+      <UniqueIdentifier>{a99b40e0-f625-495b-a0c9-61c1a89215f0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -32,26 +35,29 @@
     <ClInclude Include="util\util.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="days\2\Day2.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="days\3\Day3.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="days\4\Day4.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="days\5\Day5.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="days\6\Day6.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="days\7\Day7.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="days\8\Day8.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="days\9\Day9.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="days\2\Day2.h">
+      <Filter>Header Files\Week1</Filter>
+    </ClInclude>
+    <ClInclude Include="days\3\Day3.h">
+      <Filter>Header Files\Week1</Filter>
+    </ClInclude>
+    <ClInclude Include="days\4\Day4.h">
+      <Filter>Header Files\Week1</Filter>
+    </ClInclude>
+    <ClInclude Include="days\5\Day5.h">
+      <Filter>Header Files\Week1</Filter>
+    </ClInclude>
+    <ClInclude Include="days\6\Day6.h">
+      <Filter>Header Files\Week1</Filter>
+    </ClInclude>
+    <ClInclude Include="days\7\Day7.h">
+      <Filter>Header Files\Week1</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
