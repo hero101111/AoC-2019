@@ -14,13 +14,13 @@
 using namespace std;
 
 /////////////////////////////////
-static int partControl = 1;
+static int partControl = 11;
 /////////////////////////////////
 
 
 int main(int argc, char** argv)
 {
-  map<int, unique_ptr<ISolutionDay>> solutions;
+  map<size_t, unique_ptr<ISolutionDay>> solutions;
   size_t crtDay = 2;
   solutions[crtDay++] = static_cast<unique_ptr<ISolutionDay>>(new Day2());
   solutions[crtDay++] = static_cast<unique_ptr<ISolutionDay>>(new Day3());

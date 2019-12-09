@@ -145,12 +145,13 @@ string RegexReplace(string s, string rgx, string replace)
   return regex_replace(s, re, replace);
 }
 
-vector<int> GetDigits(int n)
+template<class T>
+vector<T> GetDigits(T n)
 {
   if (n == 0)
     return { 0 };
 
-  vector<int>  ret;
+  vector<T>  ret;
   while (n > 0)
   {
     ret.insert(begin(ret), n % 10);
@@ -370,13 +371,13 @@ struct hash<Point>
 {
   std::size_t operator()(const Point& k) const
   {
-    return k.y * 10000 + k.x;
+    return (size_t)k.y * 10000ull + k.x;
   }
 };
 
 vector<int> rangeint(int from, int to)
 {
-  vector<int> ret(to - from + 1);
+  vector<int> ret((long long)to - (long long)from + 1);
   iota(begin(ret), end(ret), from);
   return ret;
 }

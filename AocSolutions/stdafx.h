@@ -21,6 +21,7 @@
 #include <limits>
 #include <queue>
 #include <stack>
+#include <assert.h>
 
 #include <Windows.h>
 
