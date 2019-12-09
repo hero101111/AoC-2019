@@ -81,6 +81,25 @@ struct Point
     return *this;
   }
 
+  float Slope(const Point& other) const
+  {
+    if (other.x == this->x)
+      return numeric_limits<float>::max();
+
+    return ((float)other.y - this->y) / ((float)other.x - this->x);
+  }
+
+  double Angle(const Point& other) const
+  {
+    double angle = atan2(this->y - (double)other.y, this->x - (double)other.x);
+    double angleDegrees = 180.0 / 3.14159265359 * angle;
+
+    angleDegrees -= 90;
+    if (angleDegrees < -0.00001)
+      angleDegrees = 360 + angleDegrees;
+    return angleDegrees;
+  }
+
   Point FromDirection(char orientation) const
   {
     switch (orientation)
@@ -272,6 +291,13 @@ public:
     data[p.x][p.y] = value;
   }
 
+  T& operator [](Point p)
+  {
+    if (!at(p, nullptr))
+     set(p, T());
+    return data[p.x][p.y];
+  }
+
   vector<int> range_x() const
   {
     vector<int> ret(width());
@@ -311,9 +337,9 @@ public:
     if (prologue.size() > 0)
       fOut << prologue << endl;
 
-    for (int i = min_x; i <= max_x; ++i)
+    for (int j = min_y; j <= max_y; ++j)
     {
-      for (int j = min_y; j <= max_y; ++j)
+      for (int i = min_x; i <= max_x; ++i)
       {
         T data;
         if (!at({ i, j }, &data))
@@ -382,53 +408,52 @@ vector<int> rangeint(int from, int to)
   return ret;
 }
 
-template<class T>
-void printvec(vector<T>& v)
+template<class T, class S>
+void printvec(const vector<T>& v, S & stream)
 {
-  cout << endl;
+  stream << endl;
   for (auto& el : v)
-    cout << el << " ";
+    stream << el << " ";
 }
 
-template<class T>
-void printset(set<T>& v)
+template<class T, class S>
+void printset(const set<T>& v, S & stream)
 {
-  cout << endl;
+  stream << endl;
   for (auto& el : v)
-    cout << el << " ";
+    stream << el << " ";
 }
 
-template<class T>
-void printset(unordered_set<T>& v)
+template<class T, class S>
+void printset(unordered_set<T>& v, S & stream)
 {
-  cout << endl;
+  stream << endl;
   for (auto& el : v)
-    cout << el << " ";
+    stream << el << " ";
 }
 
-template<class T, class U>
-void printmap(map<T, U>& m)
+template<class T, class U, class S>
+void printmap(map<T, U>& m, S & stream)
 {
-  cout << endl;
+  stream << endl;
   for (auto& el : m)
   {
-    cout << "[" << el.first << "] = " << el.second << endl;
+    stream << "[" << el.first << "] = " << el.second << endl;
   }
 }
 
-template<class T, class U>
-void printmap(unordered_map<T, U>& m)
+template<class T, class U, class S>
+void printmap(unordered_map<T, U>& m, S & stream)
 {
-  cout << endl;
+  stream << endl;
   for (auto& el : m)
   {
-    cout << "[" << el.first << "] = " << el.second << endl;
+    stream << "[" << el.first << "] = " << el.second << endl;
   }
 }
 
 class Graph
 {
-
   typedef pair<int, int> WeightNodePair;
 
   int vertexCount;
@@ -460,6 +485,11 @@ public:
   }
 
   void AddEdge(int node1, int node2, int weight)
+  {
+    adjacency[node1].push_back(make_pair(node2, weight));
+  }
+
+  void AddEdgeSymmetrical(int node1, int node2, int weight)
   {
     adjacency[node1].push_back(make_pair(node2, weight));
     adjacency[node2].push_back(make_pair(node1, weight));
@@ -497,6 +527,9 @@ public:
       for (int j = aMap.min_y; j <= aMap.max_y; ++j)
       {
         int val = 0;
+        if (i == j)
+          continue;
+
         if (aMap.at({ i , j }, &val))
         {
           if (val > 0)
@@ -613,5 +646,6 @@ public:
 
 //--------------------------------------
 
-#define KINPUT "C:\\aoc-2019\\AocSolutions\\inputs\\Day"
-#define KOUTPUT "C:\\aoc-2019\\AocSolutions\\output\\"
+#define KINPUT   "C:\\aoc-2019\\AocSolutions\\inputs\\Day"
+#define KOUTPUT  "C:\\aoc-2019\\AocSolutions\\output\\out.txt"
+#define KVERBOSE "C:\\aoc-2019\\AocSolutions\\output\\verbose.txt"

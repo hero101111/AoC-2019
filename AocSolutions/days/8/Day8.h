@@ -103,7 +103,7 @@ public:
         }
     }
 
-    finalLayer.printf(KOUTPUT "out.txt", ' ');
+    finalLayer.printf(KOUTPUT, ' ');
     // you need to look at the output file to see what's written
     return std::to_string(t);
   }

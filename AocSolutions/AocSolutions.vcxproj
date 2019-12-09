@@ -139,6 +139,7 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="days\10\Day10.h" />
     <ClInclude Include="days\2\Day2.h" />
     <ClInclude Include="days\3\Day3.h" />
     <ClInclude Include="days\4\Day4.h" />
