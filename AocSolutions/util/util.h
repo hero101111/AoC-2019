@@ -46,6 +46,11 @@ struct Point
     return Point{ x, y + 1 };
   }
 
+  Point Up() const
+  {
+    return Point{ x, y - 1 };
+  }
+
   Point Left() const
   {
     return Point{ x - 1, y };
@@ -54,11 +59,6 @@ struct Point
   Point Right() const
   {
     return Point{ x + 1, y };
-  }
-
-  Point Up() const
-  {
-    return Point{ x, y - 1 };
   }
 
   Point FromOrientation(char orientation) const

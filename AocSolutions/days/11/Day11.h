@@ -2,13 +2,14 @@
 
 #include "SolutionDay.h"
 #include "util/util.h"
-#include "../9/Day9.h"
+#include "util/IntComputer.h"
 
 class Day11 : public ISolutionDay
 {
 private:
 
   DynamicMap<int> mapdata;
+  string          instructions;
 
 public:
 
@@ -18,6 +19,8 @@ public:
 
   void ReadData()
   {
+    vector<string> fileData  = rff(KINPUT "11\\input.txt");
+    instructions = fileData[0];
   }
 
   string DoWork(int startcolor)
@@ -26,15 +29,14 @@ public:
 
     DynamicMap<int> visited;
 
-    Day9 cpu;
-    cpu.mOutputPauses = true;
-    cpu.ReadData(KINPUT "11\\input.txt");
+    IntComputer cpu(instructions);
+    cpu.mSuspendOnOutput = true;
 
     char dir = 'u';
     bool started = false;
     Point crtLoc{ 0, 0 };
 
-    while (!cpu.Halted())
+    while (!cpu.IsHalted())
     {
       int crtColor = mapdata[crtLoc];
       if (!started)
@@ -42,11 +44,13 @@ public:
         started = true;
         crtColor = startcolor;
       }
-      int colorToPaint = cpu.DoWork(crtColor);
+
+      cpu.mInput = crtColor;
+      int colorToPaint = cpu.Execute();
       mapdata[crtLoc] = colorToPaint;
       visited[crtLoc]++;
 
-      bool rotateLeft = cpu.DoWork(crtColor) == 0;
+      bool rotateLeft = cpu.Execute() == 0;
       dir = Point::RotateDirection(dir, rotateLeft);
 
       Point newLocation = crtLoc.FromDirection(dir);

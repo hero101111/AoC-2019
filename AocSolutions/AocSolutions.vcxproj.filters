@@ -16,6 +16,12 @@
     <Filter Include="Header Files\Week1">
       <UniqueIdentifier>{a99b40e0-f625-495b-a0c9-61c1a89215f0}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\util">
+      <UniqueIdentifier>{4a1906ac-ab66-468a-b8dc-acbdcb4fcf0b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Week2">
+      <UniqueIdentifier>{99a821fe-dcca-4760-b8eb-ad8c2b421c5c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -30,15 +36,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="SolutionDay.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="util\util.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="days\8\Day8.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="days\9\Day9.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="days\2\Day2.h">
@@ -59,11 +56,23 @@
     <ClInclude Include="days\7\Day7.h">
       <Filter>Header Files\Week1</Filter>
     </ClInclude>
+    <ClInclude Include="util\util.h">
+      <Filter>Header Files\util</Filter>
+    </ClInclude>
+    <ClInclude Include="util\IntComputer.h">
+      <Filter>Header Files\util</Filter>
+    </ClInclude>
+    <ClInclude Include="days\8\Day8.h">
+      <Filter>Header Files\Week2</Filter>
+    </ClInclude>
+    <ClInclude Include="days\9\Day9.h">
+      <Filter>Header Files\Week2</Filter>
+    </ClInclude>
     <ClInclude Include="days\10\Day10.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\Week2</Filter>
     </ClInclude>
     <ClInclude Include="days\11\Day11.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\Week2</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

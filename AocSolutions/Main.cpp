@@ -20,22 +20,14 @@ using namespace std;
 int main(int argc, char** argv)
 {
   map<size_t, unique_ptr<ISolutionDay>> solutions;
-  REG_DAY(2);
-  REG_DAY(3);
-  REG_DAY(4);
-  REG_DAY(5);
-  REG_DAY(6);
-  REG_DAY(7);
-  REG_DAY(8);
-  REG_DAY(9);
-  REG_DAY(10);
-  REG_DAY(11);
+  REG_DAY(2);  REG_DAY(3);  REG_DAY(4);  REG_DAY(5);  REG_DAY(6);  REG_DAY(7);
+  REG_DAY(8);  REG_DAY(9);  REG_DAY(10);  REG_DAY(11);
  
   ///////////////////////////////
 
   int DAY = 11;
 
-  int PART = 1;
+  int PART = 2;
 
   ///////////////////////////////
 
