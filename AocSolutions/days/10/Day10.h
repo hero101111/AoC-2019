@@ -18,27 +18,8 @@ public:
 
   void ReadData()
   {
-    vector<string> lines = rff(KINPUT "10\\input.txt");
-    int crtLine = 0;
-    for (auto& line : lines)
-    {
-      int crtChar = 0;
-      for (char c : line)
-      {
-        mapdata[{crtChar, crtLine}] = c == '#' ? 1 : 0;
-        crtChar++;
-      }
-
-      crtLine++;
-    }
-
+    mapdata.fromfile(KINPUT "10\\input.txt", [](char c) { return c == '#' ? 1 : 0; });
     mapdata.printf(KOUTPUT);
-  }
-
-  void Calculate(Point p)
-  {
-    auto visited = mapdata;
-
   }
 
   vector<Point> GetLineOfSight(Point origin, Point target)

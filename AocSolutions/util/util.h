@@ -327,6 +327,20 @@ public:
     return abs(max_y - min_y) + 1;
   }
 
+  void fromfile(string filepath, function<T(char)> readFunc)
+  {
+    vector<string> lines = rff(filepath);
+    int crtLine = 0;
+    for (auto& line : lines)
+    {
+      int crtChar = 0;
+      for (char c : line)
+        (*this)[{crtChar++, crtLine}] = readFunc(c);
+
+      ++crtLine;
+    }
+  }
+
   void printf(string filePath, char empty= ' ', bool append = false, string prologue = "")
   {
     ofstream fOut;
