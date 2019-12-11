@@ -22,6 +22,12 @@
     <Filter Include="Header Files\Week2">
       <UniqueIdentifier>{99a821fe-dcca-4760-b8eb-ad8c2b421c5c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Week3">
+      <UniqueIdentifier>{6673a70e-dad0-40ec-8ec1-7d6efe2742b4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Week4">
+      <UniqueIdentifier>{be07ddd4-51f4-444d-98b4-e406bb3d53dc}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -73,6 +79,48 @@
     </ClInclude>
     <ClInclude Include="days\11\Day11.h">
       <Filter>Header Files\Week2</Filter>
+    </ClInclude>
+    <ClInclude Include="days\12\Day12.h">
+      <Filter>Header Files\Week2</Filter>
+    </ClInclude>
+    <ClInclude Include="days\13\Day13.h">
+      <Filter>Header Files\Week2</Filter>
+    </ClInclude>
+    <ClInclude Include="days\14\Day14.h">
+      <Filter>Header Files\Week2</Filter>
+    </ClInclude>
+    <ClInclude Include="days\15\Day15.h">
+      <Filter>Header Files\Week3</Filter>
+    </ClInclude>
+    <ClInclude Include="days\16\Day16.h">
+      <Filter>Header Files\Week3</Filter>
+    </ClInclude>
+    <ClInclude Include="days\17\Day17.h">
+      <Filter>Header Files\Week3</Filter>
+    </ClInclude>
+    <ClInclude Include="days\18\Day18.h">
+      <Filter>Header Files\Week3</Filter>
+    </ClInclude>
+    <ClInclude Include="days\19\Day19.h">
+      <Filter>Header Files\Week3</Filter>
+    </ClInclude>
+    <ClInclude Include="days\20\Day20.h">
+      <Filter>Header Files\Week3</Filter>
+    </ClInclude>
+    <ClInclude Include="days\21\Day21.h">
+      <Filter>Header Files\Week4</Filter>
+    </ClInclude>
+    <ClInclude Include="days\22\Day22.h">
+      <Filter>Header Files\Week4</Filter>
+    </ClInclude>
+    <ClInclude Include="days\23\Day23.h">
+      <Filter>Header Files\Week4</Filter>
+    </ClInclude>
+    <ClInclude Include="days\24\Day24.h">
+      <Filter>Header Files\Week4</Filter>
+    </ClInclude>
+    <ClInclude Include="days\25\Day25.h">
+      <Filter>Header Files\Week4</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

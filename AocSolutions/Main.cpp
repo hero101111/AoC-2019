@@ -12,6 +12,20 @@
 #include "days/9/Day9.h"
 #include "days/10/Day10.h"
 #include "days/11/Day11.h"
+#include "days/12/Day12.h"
+#include "days/13/Day13.h"
+#include "days/14/Day14.h"
+#include "days/15/Day15.h"
+#include "days/16/Day16.h"
+#include "days/17/Day17.h"
+#include "days/18/Day18.h"
+#include "days/19/Day19.h"
+#include "days/20/Day20.h"
+#include "days/21/Day21.h"
+#include "days/22/Day22.h"
+#include "days/23/Day23.h"
+#include "days/24/Day24.h"
+#include "days/25/Day25.h"
 
 #define REG_DAY(a) solutions[a] = static_cast<unique_ptr<ISolutionDay>>(new Day##a());
 
@@ -21,13 +35,15 @@ int main(int argc, char** argv)
 {
   map<size_t, unique_ptr<ISolutionDay>> solutions;
   REG_DAY(2);  REG_DAY(3);  REG_DAY(4);  REG_DAY(5);  REG_DAY(6);  REG_DAY(7);
-  REG_DAY(8);  REG_DAY(9);  REG_DAY(10);  REG_DAY(11);
+  REG_DAY(8);  REG_DAY(9);  REG_DAY(10);  REG_DAY(11); REG_DAY(12); REG_DAY(13);
+  REG_DAY(14);  REG_DAY(15);  REG_DAY(16);  REG_DAY(17); REG_DAY(18); REG_DAY(19);
+  REG_DAY(20);  REG_DAY(21);  REG_DAY(22);  REG_DAY(23); REG_DAY(24); REG_DAY(25);
  
   ///////////////////////////////
 
-  int DAY = 11;
+  int DAY = 12;
 
-  int PART = 2;
+  int PART = 1;
 
   ///////////////////////////////
 

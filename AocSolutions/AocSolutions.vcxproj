@@ -141,6 +141,20 @@
   <ItemGroup>
     <ClInclude Include="days\10\Day10.h" />
     <ClInclude Include="days\11\Day11.h" />
+    <ClInclude Include="days\12\Day12.h" />
+    <ClInclude Include="days\13\Day13.h" />
+    <ClInclude Include="days\14\Day14.h" />
+    <ClInclude Include="days\15\Day15.h" />
+    <ClInclude Include="days\16\Day16.h" />
+    <ClInclude Include="days\17\Day17.h" />
+    <ClInclude Include="days\18\Day18.h" />
+    <ClInclude Include="days\19\Day19.h" />
+    <ClInclude Include="days\20\Day20.h" />
+    <ClInclude Include="days\21\Day21.h" />
+    <ClInclude Include="days\22\Day22.h" />
+    <ClInclude Include="days\23\Day23.h" />
+    <ClInclude Include="days\24\Day24.h" />
+    <ClInclude Include="days\25\Day25.h" />
     <ClInclude Include="days\2\Day2.h" />
     <ClInclude Include="days\3\Day3.h" />
     <ClInclude Include="days\4\Day4.h" />
