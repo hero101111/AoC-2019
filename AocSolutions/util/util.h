@@ -125,21 +125,60 @@ struct Point
     }
   }
 
+  static char ArrowToDirection(char arrow)
+  {
+    switch (arrow)
+    {
+    case '<':
+      return 'l';
+    case '>':
+      return 'r';
+    case 'v':
+      return 'd';
+    case '^':
+      return 'u';
+    }
+    assert("!Invalid");
+    return 'x';
+  }
+
+  static char DirectionToArrow(char dir)
+  {
+    switch (dir)
+    {
+    case 'd':
+    case 'v':
+      return 'v';
+    case 'u':
+      return '^';
+    case 'l':
+      return '<';
+    case 'r':
+      return '>';
+    }
+    assert(!"Invalid");
+    return 'x';
+  }
+
   Point FromDirection(char orientation) const
   {
     switch (orientation)
     {
     case 'u':
     case 'U':
+    case '^':
       return Up();
     case 'r':
     case 'R':
+    case '>':
       return Right();
     case 'l':
     case 'L':
+    case '<':
       return Left();
     case 'd':
     case 'D':
+    case 'v':
       return Down();
     }
     return *this;
@@ -163,6 +202,8 @@ struct Point
       case 'r':
         return 'u';
         break;
+      default:
+        assert(!"Unsupported");
       }
     }
     else
@@ -181,6 +222,8 @@ struct Point
       case 'r':
         return 'd';
         break;
+      default:
+        assert(!"Unsupported");
       }
     }
   }
@@ -204,6 +247,11 @@ struct Point
   int ManhattanDist(const Point& p) const
   {
     return abs(x - p.x) + abs(y - p.y);
+  }
+
+  double DistanceTo(const Point& p) const
+  {
+    return sqrt(pow(p.x - x, 2) + pow(p.y - y, 2));
   }
 
   bool IsInGrid(int width, int height) const
