@@ -11,44 +11,46 @@
 #include "days/8/Day8.h"
 #include "days/9/Day9.h"
 #include "days/10/Day10.h"
+#include "days/11/Day11.h"
+
+#define REG_DAY(a) solutions[a] = static_cast<unique_ptr<ISolutionDay>>(new Day##a());
 
 using namespace std;
-
-/////////////////////////////////
-static int partControl = 11;
-/////////////////////////////////
-
 
 int main(int argc, char** argv)
 {
   map<size_t, unique_ptr<ISolutionDay>> solutions;
-  size_t crtDay = 2;
-  solutions[crtDay++] = static_cast<unique_ptr<ISolutionDay>>(new Day2());
-  solutions[crtDay++] = static_cast<unique_ptr<ISolutionDay>>(new Day3());
-  solutions[crtDay++] = static_cast<unique_ptr<ISolutionDay>>(new Day4());
-  solutions[crtDay++] = static_cast<unique_ptr<ISolutionDay>>(new Day5());
-  solutions[crtDay++] = static_cast<unique_ptr<ISolutionDay>>(new Day6());
-  solutions[crtDay++] = static_cast<unique_ptr<ISolutionDay>>(new Day7());
-  solutions[crtDay++] = static_cast<unique_ptr<ISolutionDay>>(new Day8());
-  solutions[crtDay++] = static_cast<unique_ptr<ISolutionDay>>(new Day9());
-  solutions[crtDay++] = static_cast<unique_ptr<ISolutionDay>>(new Day10());
+  REG_DAY(2);
+  REG_DAY(3);
+  REG_DAY(4);
+  REG_DAY(5);
+  REG_DAY(6);
+  REG_DAY(7);
+  REG_DAY(8);
+  REG_DAY(9);
+  REG_DAY(10);
+  REG_DAY(11);
  
   ///////////////////////////////
-  int dayToRun = 10;
+
+  int DAY = 11;
+
+  int PART = 1;
+
   ///////////////////////////////
 
-  auto & runner = solutions[dayToRun];
+  auto & runner = solutions[DAY];
   string result;
 
-  bool runPartOne = partControl == 1;
+  bool runPartOne = PART == 1;
   if (runPartOne)
   {
-    cout << "Running Day " << dayToRun << " PART 1 " << endl;
+    cout << "Running Day " << DAY << " PART 1 " << endl;
     result = runner->Part1();
   }
   else
   {
-    cout << "Running Day " << dayToRun << " PART 2 " << endl;
+    cout << "Running Day " << DAY << " PART 2 " << endl;
     result = runner->Part2();
   }
 

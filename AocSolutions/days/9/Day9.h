@@ -9,6 +9,12 @@ private:
 
   vector<string> mData;
   objmap<string> omap;
+  vector<long long> values;
+  long long relBase{ 0 };
+  bool mHalted{ false };
+
+  vector<long long>::iterator mIP;
+
 
 public:
 
@@ -16,24 +22,27 @@ public:
 
   ~Day9() override { }
 
-  void ReadData()
-  {
-    auto data = rff(KINPUT "9\\input.txt");
-    mData = tok(data[0], ',');
-  }
-  long long DoWork(int input)
-  {
-    long long relBase = 0;
+  bool mOutputPauses{ false };
 
-    vector<long long> values(mData.size() * 100, 0);
+  void ReadData(string filePath)
+  {
+    auto data = rff(filePath);
+    mData = tok(data[0], ',');
+
+    values.resize(mData.size() * 100, 0);
     for (size_t i = 0; i < mData.size(); ++i)
       values[i] = stoll(mData[i]);
 
+    mIP = values.begin();
+  }
+
+  long long DoWork(int input)
+  {
     vector<long long>& memory = values;
 
     long long ret = 0;
 
-    auto it = values.begin();
+    auto it = mIP;
     while (it != values.end())
     {
       long long instr = 0;
@@ -48,7 +57,7 @@ public:
         }
       }
 
-      auto readMem = [&memory, &relBase, &it, &digits]()
+      auto readMem = [&memory, this, &it, &digits]()
       {
         int mode = digits.empty() ? 0 : digits.back();
         if (!digits.empty())
@@ -71,7 +80,7 @@ public:
         return pos;
       };
 
-      auto writeMem = [&memory, &relBase, &it, &digits](long long val)
+      auto writeMem = [&memory, this, &it, &digits](long long val)
       {
         long long where = *++it;
         int mode = digits.empty() ? 0 : digits.back();
@@ -83,7 +92,10 @@ public:
       };
 
       if (instr == 99)
-        break;
+      {
+        mHalted = true;
+        break;        
+      }
       else if (instr == 1)
       {
         vector<long long> params = { readMem(), readMem() };
@@ -101,6 +113,12 @@ public:
       else if (instr == 4)
       {
         ret = readMem();
+
+        if (mOutputPauses)
+        {
+          mIP = ++it;
+          return ret;
+        }
       }
       else if (instr == 5)
       {
@@ -145,9 +163,15 @@ public:
     return ret;
   }
 
+
+  bool Halted() const
+  {
+    return mHalted;
+  }
+
   string Part1() override
   {
-    ReadData();
+    ReadData(KINPUT "9\\input.txt");
 
     long long t = DoWork(1);
     return std::to_string(t);
@@ -155,7 +179,7 @@ public:
 
   string Part2() override
   {
-    ReadData();
+    ReadData(KINPUT "9\\input.txt");
 
     long long t = DoWork(2);
     return std::to_string(t);

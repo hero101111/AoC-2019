@@ -62,5 +62,8 @@
     <ClInclude Include="days\10\Day10.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="days\11\Day11.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

@@ -69,8 +69,7 @@ public:
 
   bool IsVisible(Point origin, Point target)
   {
-    bool targetGoesRight = target.x > origin.x;
-    bool targetGoesDown = target.y > origin.y;
+    int quadrant = origin.GetQuadrant(target);
 
     if (mapdata[target] == 0)
       return false;
@@ -87,22 +86,22 @@ public:
         continue;
 
       bool between = false;
-      if (targetGoesRight && !targetGoesDown)
+      if (quadrant == 1)
       {
         // I
         between = other.x >= origin.x && other.y <= origin.y && other.x <= target.x && other.y >= target.y;
       }
-      else if (!targetGoesRight && !targetGoesDown)
+      else if (quadrant == 2)
       {
         // II
         between = other.x <= origin.x && other.y <= origin.y && other.x >= target.x && other.y >= target.y;
       }
-      else if (!targetGoesRight && targetGoesDown)
+      else if (quadrant == 3)
       {
         // III
         between = other.x <= origin.x && other.y >= origin.y && other.x >= target.x && other.y <= target.y;
       }
-      else if (targetGoesRight && targetGoesDown)
+      else if (quadrant == 4)
       {
         // IV
         between = other.x >= origin.x && other.y >= origin.y && other.x <= target.x && other.y <= target.y;

@@ -43,7 +43,7 @@ struct Point
 
   Point Down() const
   {
-    return Point{ x, y - 1 };
+    return Point{ x, y + 1 };
   }
 
   Point Left() const
@@ -58,7 +58,7 @@ struct Point
 
   Point Up() const
   {
-    return Point{ x, y + 1 };
+    return Point{ x, y - 1 };
   }
 
   Point FromOrientation(char orientation) const
@@ -100,6 +100,31 @@ struct Point
     return angleDegrees;
   }
 
+  // Get the quadrant in which another point is relative to this one
+  // Y goes down, as in computer screen, inversely to math
+  int GetQuadrant(Point target)
+  {
+    const bool targetGoesRight = target.x > x;
+    const bool targetGoesDown = target.y > y;
+
+    if (targetGoesRight && !targetGoesDown)
+    {
+      return 1;
+    }
+    else if (!targetGoesRight && !targetGoesDown)
+    {
+      return 2;
+    }
+    else if (!targetGoesRight && targetGoesDown)
+    {
+      return 3;
+    }
+    else if (targetGoesRight && targetGoesDown)
+    {
+      return 4;
+    }
+  }
+
   Point FromDirection(char orientation) const
   {
     switch (orientation)
@@ -118,6 +143,46 @@ struct Point
       return Down();
     }
     return *this;
+  }
+   
+  static char RotateDirection(char c, bool left)
+  {
+    if (left)
+    {
+      switch (c)
+      {
+      case 'u':
+        return 'l';
+        break;
+      case 'l':
+        return 'd';
+        break;
+      case 'd':
+        return 'r';
+        break;
+      case 'r':
+        return 'u';
+        break;
+      }
+    }
+    else
+    {
+      switch (c)
+      {
+      case 'u':
+        return 'r';
+        break;
+      case 'l':
+        return 'u';
+        break;
+      case 'd':
+        return 'l';
+        break;
+      case 'r':
+        return 'd';
+        break;
+      }
+    }
   }
 
   vector<Point> GetNeighbours() const
@@ -327,6 +392,21 @@ public:
     return abs(max_y - min_y) + 1;
   }
 
+  size_t for_each(function<bool(T&)> func)
+  {
+    size_t ret = 0;
+    for (int i : range_x())
+      for (int j : range_y())
+      {
+        T data;
+        if (at({ i, j }, &data))
+        {
+          ret += func(data);
+        }
+      }
+    return ret;
+  }
+
   void fromfile(string filepath, function<T(char)> readFunc)
   {
     vector<string> lines = rff(filepath);
@@ -351,15 +431,15 @@ public:
     if (prologue.size() > 0)
       fOut << prologue << endl;
 
-    for (int j = min_y; j <= max_y; ++j)
+    for (int j : range_y())
     {
-      for (int i = min_x; i <= max_x; ++i)
+      for (int i : range_x())
       {
         T data;
         if (!at({ i, j }, &data))
           data = empty;
 
-        fOut << data;
+        fOut << data << " ";
       }
       fOut << endl;
     }
