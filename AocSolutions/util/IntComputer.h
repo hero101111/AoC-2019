@@ -10,6 +10,9 @@ public:
   long long     mOutput         {   0   };
   long long     mInput          {   0   };
 
+  function<long long(void)> mInputFunction{ nullptr };
+  function<void(long long)> mOutputCallback{ nullptr };
+
 private:
   typedef unordered_map<long long, long long> DT;
 
@@ -18,6 +21,8 @@ private:
   bool          mHalted         {  false };
 
   long long     mIP             {   0    } ;
+
+  vector<string> mInitialInstructions;
 
 public:
 
@@ -28,14 +33,18 @@ public:
 
   ~IntComputer() { }
 
+  void ResetMemory()
+  {
+    memory.clear();
+    for (size_t i = 0; i < mInitialInstructions.size(); ++i)
+      memory[i] = stoll(mInitialInstructions[i]);
+    mIP = 0;
+  }
+
   void SetInstructions(string instructions)
   {
-    vector<string> data = tok(instructions, ',');
-
-    for (size_t i = 0; i < data.size(); ++i)
-      memory[i] = stoll(data[i]);
-
-    mIP = 0;
+    mInitialInstructions = tok(instructions, ',');
+    ResetMemory();
   }
 
   long long Execute()
@@ -106,12 +115,19 @@ public:
       }
       else if (instr == 3)
       {
-        writeMem(mInput);
+        auto inputToUse = mInput;
+        if (mInputFunction != nullptr)
+          inputToUse = mInputFunction();
+
+        writeMem(inputToUse);
       }
       else if (instr == 4)
       {
         ret = readMem();
         mOutput = ret;
+
+        if (mOutputCallback != nullptr)
+          mOutputCallback(ret);
 
         if (mSuspendOnOutput)
         {
