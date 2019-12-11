@@ -6,18 +6,18 @@ class IntComputer
 {
 public:
    
-  bool                        mSuspendOnOutput{ false };
-  long long                   mOutput         {   0   };
-  long long                   mInput          {   0   };
+  bool          mSuspendOnOutput{ false };
+  long long     mOutput         {   0   };
+  long long     mInput          {   0   };
 
 private:
+  typedef unordered_map<long long, long long> DT;
 
-  vector<long long>           values;
-  long long                   relBase         {   0    };
-  bool                        mHalted         {  false };
+  DT            memory;
+  long long     relBase         {   0    };
+  bool          mHalted         {  false };
 
-  vector<long long>::iterator mIP;
-
+  long long     mIP             {   0    } ;
 
 public:
 
@@ -32,24 +32,24 @@ public:
   {
     vector<string> data = tok(instructions, ',');
 
-    values.resize(data.size() * 100, 0);
     for (size_t i = 0; i < data.size(); ++i)
-      values[i] = stoll(data[i]);
+      memory[i] = stoll(data[i]);
 
-    mIP = values.begin();
+    mIP = 0;
   }
 
   long long Execute()
   {
-    vector<long long>& memory = values;
+    auto memAt = [this](long long it) {return memory[it]; };
 
     long long ret = 0;
 
-    auto it = mIP;
-    while (it != values.end())
+    auto crtIp = mIP;
+
+    while (true)
     {
       long long instr = 0;
-      auto digits = GetDigits(*it);
+      auto digits = GetDigits(memAt(crtIp));
       {
         instr = digits.back();
         digits.pop_back();
@@ -60,13 +60,13 @@ public:
         }
       }
 
-      auto readMem = [&memory, this, &it, &digits]()
+      auto readMem = [this, &crtIp, &digits, memAt]()
       {
         int mode = digits.empty() ? 0 : digits.back();
         if (!digits.empty())
           digits.pop_back();
 
-        long long pos = *++it;
+        long long pos = memAt(++crtIp);
         if (mode == 0)
         {
           return memory[pos];
@@ -83,9 +83,9 @@ public:
         return pos;
       };
 
-      auto writeMem = [&memory, this, &it, &digits](long long val)
+      auto writeMem = [this, &crtIp, &digits, memAt](long long val)
       {
-        long long where = *++it;
+        long long where = memAt(++crtIp);
         int mode = digits.empty() ? 0 : digits.back();
         if (!digits.empty())
           digits.pop_back();
@@ -94,12 +94,7 @@ public:
         memory[where] = val;
       };
 
-      if (instr == 99)
-      {
-        mHalted = true;
-        break;        
-      }
-      else if (instr == 1)
+      if (instr == 1)
       {
         vector<long long> params = { readMem(), readMem() };
         writeMem(params[0] + params[1]);
@@ -120,7 +115,7 @@ public:
 
         if (mSuspendOnOutput)
         {
-          mIP = ++it;
+          mIP = ++crtIp;
           return ret;
         }
       }
@@ -129,7 +124,7 @@ public:
         vector<long long> params = { readMem(), readMem() };
         if (params[0] != 0)
         {
-          it = values.begin() + params[1];
+          crtIp = params[1];
           continue;
         }
       }
@@ -138,7 +133,7 @@ public:
         vector<long long> params = { readMem(), readMem() };
         if (params[0] == 0)
         {
-          it = values.begin() + params[1];
+          crtIp = params[1];
           continue;
         }
       }
@@ -158,10 +153,13 @@ public:
       {
         relBase += readMem();
       }
-
-      it++;
-      if (it == values.end())
+      else if (instr == 99)
+      {
+        mHalted = true;
         break;
+      }
+
+      ++crtIp;
     }
 
     return ret;
