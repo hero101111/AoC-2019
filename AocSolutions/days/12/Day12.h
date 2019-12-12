@@ -2,12 +2,10 @@
 
 #include "SolutionDay.h"
 #include "util/util.h"
-#include "util/IntComputer.h"
 
 struct Moon
 {
-  Point location{ 0, 0, 0 };
-  Point velocity{ 0, 0, 0 };
+  Point location, velocity;
 
   void Move(int axis)
   {
@@ -53,12 +51,7 @@ public:
     {
       auto tokens = RegexMatch(d, R"(<x=(-?\d+), y=(-?\d+), z=(-?\d+)>)");
       Moon moon;
-
-      Point location;
-      location.x = stoi(tokens[0]);
-      location.y = stoi(tokens[1]);
-      location.z = stoi(tokens[2]);
-      moon.location = location;
+      moon.location = Point(tokens[0], tokens[1], tokens[2]);
       moons.push_back(moon);
     }
   }
@@ -79,10 +72,10 @@ public:
 
   void SimulateStep(int axis)
   {
-    for (int m1 = 0; m1 < moons.size() - 1; ++m1)
+    for (int m1 : rangeint(0, moons.size() - 2))
     {
       Moon& moon1 = moons[m1];
-      for (int m2 = m1 + 1; m2 < moons.size(); ++m2)
+      for (int m2 : rangeint( m1 + 1, moons.size() - 1))
       {
         Moon& moon2 = moons[m2];
         SimulateGravity(moon1.location[axis], moon2.location[axis], moon1.velocity[axis], moon2.velocity[axis]);
@@ -96,11 +89,10 @@ public:
   {
     ReadData();
 
-    for (int i = 0; i < 1000; ++i)
+    for (int _ : rangeint( 0, 999))
     {
-      SimulateStep(0);
-      SimulateStep(1);
-      SimulateStep(2);
+      for (int axis : rangeint(0, 2))
+        SimulateStep(axis);
     }
 
     int t = 0;
@@ -127,7 +119,7 @@ public:
         currentStep++;
 
         bool stop = true;
-        for (int i = 0; i < backup.size(); ++i)
+        for (int i : rangeint(0, backup.size() - 1))
         {
           if (moons[i].location[axis] != backup[i].location[axis] || 
               moons[i].velocity[axis] != backup[i].velocity[axis] )

@@ -21,11 +21,25 @@ void pic(T v)
 
 struct Point
 {
-  int x{ 0 }, y{ 0 };
+  int x{ 0 }, y{ 0 }, z{ 0 };
 
-  int z{ 0 };
+  Point() {}
+  Point(int ax, int ay, int az = 0) : x(ax), y(ay), z(az) { }
+  Point(string ax, string ay, string az = "0") : x(stoi(ax)), y(stoi(ay)), z(stoi(az)) { }
 
   int& operator[](int index)
+  {
+    if (index == 0)
+      return x;
+    if (index == 1)
+      return y;
+    if (index == 2)
+      return z;
+    assert(!"Invalid coordinate");
+    return x;
+  }
+
+  const int& operator[](int index) const
   {
     if (index == 0)
       return x;
@@ -52,32 +66,51 @@ struct Point
     return { x - other.x, y - other.y, z - other.z };
   }
 
+  Point operator +(const Point& other) const
+  {
+    return { x + other.x, y + other.y, z + other.z };
+  }
+
   bool operator < (const Point& other) const
   {
     if (other.y < y) return true;
     if (y == other.y && x < other.x)
+      return true;
+    if (y == other.y && x == other.x && z < other.z)
       return true;
     return false;
   }
 
   Point Down() const
   {
-    return Point{ x, y + 1 };
+    return Point{ x, y + 1, z };
   }
 
   Point Up() const
   {
-    return Point{ x, y - 1 };
+    return Point{ x, y - 1, z };
   }
 
   Point Left() const
   {
-    return Point{ x - 1, y };
+    return Point{ x - 1, y, z };
   }
 
   Point Right() const
   {
-    return Point{ x + 1, y };
+    return Point{ x + 1, y, z };
+  }
+
+  string ToString() const
+  {
+    string s = "(";
+    s += to_string(x);
+    s += ", ";
+    s += to_string(y);
+    s += ", ";
+    s += to_string(z);
+    s += ")";
+    return s;
   }
 
   Point FromOrientation(char orientation) const
@@ -265,24 +298,24 @@ struct Point
 
   int ManhattanDist(const Point& p) const
   {
-    return abs(x - p.x) + abs(y - p.y);
+    return abs(x - p.x) + abs(y - p.y) + abs(z - p.z);
   }
 
   double DistanceTo(const Point& p) const
   {
-    return sqrt(pow(p.x - x, 2) + pow(p.y - y, 2));
+    return sqrt(pow(p.x - x, 2) + pow(p.y - y, 2) + pow(p.z - z, 2));
   }
 
-  bool IsInGrid(int width, int height) const
+  bool IsInGrid(int width, int height, int depth = 0) const
   {
-    return x >= 0 && y >= 0 && x < width && y < height;
+    return x >= 0 && y >= 0 && x < width && y < height && z >= 0 && z < depth;
   }
 };
 
 
 ostream& operator << (ostream& out, const Point& c)
 {
-  out << "(" << c.x << ", " << c.y << ", " << c.z << ") \t\t";
+  out << c.ToString() << "\t\t";
   return out;
 }
 
@@ -565,15 +598,23 @@ struct hash<Point>
 {
   std::size_t operator()(const Point& k) const
   {
-    return (size_t)k.z * 6113ull + (size_t)k.y * 1187ull + k.x;
+    string s = to_string(k[0]) + "_" + to_string(k[1]) + "_" + to_string(k[2]);
+
+    return hash<string>()(s);
   }
 };
 
-vector<int> rangeint(int from, int to)
+vector<long long> rangeint(long long from, long long to)
 {
-  vector<int> ret((long long)to - (long long)from + 1);
+  vector<long long> ret(to - from + 1);
   iota(begin(ret), end(ret), from);
   return ret;
+}
+
+template<class T, class F>
+void for_each(const T& c, F func)
+{
+  for_each(begin(c), end(c), func);
 }
 
 template<class T, class S>

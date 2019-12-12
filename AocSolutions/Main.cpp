@@ -50,7 +50,7 @@ int main(int argc, char** argv)
   auto & runner = solutions[DAY];
   string result;
 
-  bool runPartOne = PART == 2;
+  bool runPartOne = PART == 1;
   if (runPartOne)
   {
     cout << "Running Day " << DAY << " PART 1 " << endl;
