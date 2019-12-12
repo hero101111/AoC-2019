@@ -23,14 +23,33 @@ struct Point
 {
   int x{ 0 }, y{ 0 };
 
+  int z{ 0 };
+
+  int& operator[](int index)
+  {
+    if (index == 0)
+      return x;
+    if (index == 1)
+      return y;
+    if (index == 2)
+      return z;
+    assert(!"Invalid coordinate");
+    return x;
+  }
+
   bool operator ==(const Point& other) const
   {
-    return x == other.x && y == other.y;
+    return x == other.x && y == other.y && z == other.z;
   }
 
   bool operator != (const Point& other) const
   {
     return !operator ==(other);
+  }
+
+  Point operator -(const Point& other) const
+  {
+    return { x - other.x, y - other.y, z - other.z };
   }
 
   bool operator < (const Point& other) const
@@ -259,6 +278,13 @@ struct Point
     return x >= 0 && y >= 0 && x < width && y < height;
   }
 };
+
+
+ostream& operator << (ostream& out, const Point& c)
+{
+  out << "(" << c.x << ", " << c.y << ", " << c.z << ") \t\t";
+  return out;
+}
 
 vector<string> RegexMatch(string s, string regex)
 {
@@ -539,7 +565,7 @@ struct hash<Point>
 {
   std::size_t operator()(const Point& k) const
   {
-    return (size_t)k.y * 10000ull + k.x;
+    return (size_t)k.z * 6113ull + (size_t)k.y * 1187ull + k.x;
   }
 };
 
@@ -553,7 +579,6 @@ vector<int> rangeint(int from, int to)
 template<class T, class S>
 void printvec(const vector<T>& v, S & stream)
 {
-  stream << endl;
   for (auto& el : v)
     stream << el << " ";
 }
@@ -785,6 +810,22 @@ public:
   }
 };
 
+long long gcd(long long a, long long b)
+{
+  while (true)
+  {
+    if (a == 0) return b;
+    b %= a;
+    if (b == 0) return a;
+    a %= b;
+  }
+}
+
+long long lcm(long long a, long long b)
+{
+  int g = gcd(a, b);
+  return g ? (a / g * b) : 0;
+}
 
 //--------------------------------------
 

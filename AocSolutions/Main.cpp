@@ -34,14 +34,14 @@ using namespace std;
 int main(int argc, char** argv)
 {
   map<size_t, unique_ptr<ISolutionDay>> solutions;
-  REG_DAY(2);  REG_DAY(3);  REG_DAY(4);  REG_DAY(5);  REG_DAY(6);  REG_DAY(7);
-  REG_DAY(8);  REG_DAY(9);  REG_DAY(10);  REG_DAY(11); REG_DAY(12); REG_DAY(13);
+  REG_DAY( 2);  REG_DAY( 3);  REG_DAY( 4);  REG_DAY( 5); REG_DAY( 6); REG_DAY( 7);
+  REG_DAY( 8);  REG_DAY( 9);  REG_DAY(10);  REG_DAY(11); REG_DAY(12); REG_DAY(13);
   REG_DAY(14);  REG_DAY(15);  REG_DAY(16);  REG_DAY(17); REG_DAY(18); REG_DAY(19);
   REG_DAY(20);  REG_DAY(21);  REG_DAY(22);  REG_DAY(23); REG_DAY(24); REG_DAY(25);
  
-  ///////////////////////////////
-
   int DAY = 12;
+
+  ///////////////////////////////
 
   int PART = 1;
 
@@ -50,7 +50,7 @@ int main(int argc, char** argv)
   auto & runner = solutions[DAY];
   string result;
 
-  bool runPartOne = PART == 1;
+  bool runPartOne = PART == 2;
   if (runPartOne)
   {
     cout << "Running Day " << DAY << " PART 1 " << endl;
