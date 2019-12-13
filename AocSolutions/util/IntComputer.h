@@ -186,4 +186,9 @@ public:
     return mHalted;
   }
 
+  void SetMemoryAt(long long index, long long val)
+  {
+    memory[index] = val;
+  }
+
 };
