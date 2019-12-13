@@ -868,8 +868,19 @@ long long lcm(long long a, long long b)
   return g ? (a / g * b) : 0;
 }
 
+
+void toConsole(Point p, const string & s) {
+  DWORD dw;
+  COORD here;
+  HANDLE hStdOut = GetStdHandle(STD_OUTPUT_HANDLE);
+  here.X = p.x;
+  here.Y = p.y;
+  WriteConsoleOutputCharacter(hStdOut, s.c_str(), s.size(), here, &dw);
+};
+
 //--------------------------------------
 
 #define KINPUT   "C:\\aoc-2019\\AocSolutions\\inputs\\Day"
 #define KOUTPUT  "C:\\aoc-2019\\AocSolutions\\output\\out.txt"
 #define KVERBOSE "C:\\aoc-2019\\AocSolutions\\output\\verbose.txt"
+

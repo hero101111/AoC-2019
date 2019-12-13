@@ -1,6 +1,7 @@
 #pragma once
 
 #include "util/util.h"
+#include "util/IntComputer.h"
 
 class ISolutionDay
 {
