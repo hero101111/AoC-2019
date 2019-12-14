@@ -915,6 +915,18 @@ void toConsole(Point p, const string & s) {
   WriteConsoleOutputCharacter(hStdOut, s.c_str(), s.size(), here, &dw);
 };
 
+long long binsearch(long long left, long long right, long long find, function<long long(long long)> func)
+{
+  while (right > left + 1)
+  {
+    long long searchPoint = left + (right - left) / 2;
+    long long res = func(searchPoint);
+    if (res > find) right = searchPoint;
+    if (res < find) left = searchPoint;
+  }
+  return left;
+}
+
 //--------------------------------------
 
 #define KINPUT   "C:\\aoc-2019\\AocSolutions\\inputs\\Day"

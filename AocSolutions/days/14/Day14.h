@@ -114,15 +114,8 @@ public:
 
     long long minval = fuel / Solve(1);
     long long maxval = minval * 10;
+    long long ret = binsearch(minval, maxval, fuel, [&](auto i) { return Solve(i); });
 
-    while (maxval > minval + 1)
-    {
-      long long searchPoint = minval + (maxval - minval) / 2;
-      long long res = Solve(searchPoint);
-      if (res > fuel) maxval = searchPoint;
-      if (res < fuel) minval = searchPoint;
-    }
-
-    return std::to_string(minval);
+    return std::to_string(ret);
   }
 };
