@@ -697,6 +697,43 @@ public:
     adjacency[node1].push_back(make_pair(node2, weight));
   }
 
+  void AddOrIncrementEdge(int node1, int node2, int weight)
+  {
+    for (auto it = begin(adjacency[node1]); it != end(adjacency[node1]); ++it)
+    {
+      if (it->first == node2)
+      {
+        it->second += weight;
+        return;
+      }
+    }
+    AddEdge(node1, node2, weight);
+  }
+
+  vector<int> GetEdgesFrom(int node1)
+  {
+    vector<int> ret;
+    for (auto it = begin(adjacency[node1]); it != end(adjacency[node1]); ++it)
+    {
+       ret.push_back(it->first);
+    } 
+    return ret;
+  }
+
+  vector<int> GetEdgesTo(int node1)
+  {
+    vector<int> ret;
+    for (auto it : rangeint(0, vertexCount - 1))
+    {
+      for (auto vv = begin(adjacency[it]); vv != end(adjacency[it]); ++vv)
+      {
+        if (vv->first == node1)
+          ret.push_back(it);
+      }
+    }
+    return ret;
+  }
+
   void AddEdgeSymmetrical(int node1, int node2, int weight)
   {
     adjacency[node1].push_back(make_pair(node2, weight));
