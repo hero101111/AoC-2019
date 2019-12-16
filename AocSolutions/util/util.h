@@ -617,11 +617,17 @@ void for_each(const T& c, F func)
   for_each(begin(c), end(c), func);
 }
 
+template<class T, class V>
+bool contains(const T& c, const V& v)
+{
+  return find(begin(c), end(c), v) != end(c);
+}
+
 template<class T, class S>
 void printvec(const vector<T>& v, S & stream)
 {
   for (auto& el : v)
-    stream << el << " ";
+    stream << el;
 }
 
 template<class T, class S>
