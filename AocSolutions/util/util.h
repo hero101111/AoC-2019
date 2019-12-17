@@ -242,15 +242,19 @@ struct Point
     {
       switch (c)
       {
+      case '^':
       case 'u':
         return 'l';
         break;
+      case '<':
       case 'l':
         return 'd';
         break;
+      case 'v':
       case 'd':
         return 'r';
         break;
+      case '>':
       case 'r':
         return 'u';
         break;
@@ -262,15 +266,19 @@ struct Point
     {
       switch (c)
       {
+      case '^':
       case 'u':
         return 'r';
         break;
+      case '<':
       case 'l':
         return 'u';
         break;
+      case 'v':
       case 'd':
         return 'l';
         break;
+      case '>':
       case 'r':
         return 'd';
         break;
@@ -447,6 +455,18 @@ public:
       *aOutVal = yData->second;
 
     return true;
+  }
+
+  bool hasAt(Point p, const T & aVal)
+  {
+    auto xData = data.find(p.x);
+    if (xData == end(data))
+      return false;
+    auto yData = xData->second.find(p.y);
+    if (yData == end(xData->second))
+      return false;
+
+    return aVal == yData->second;
   }
 
   void set(Point p, T value)
