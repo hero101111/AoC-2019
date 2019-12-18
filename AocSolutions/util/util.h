@@ -19,6 +19,19 @@ void pic(T v)
   return pic(std::to_string(v));
 }
 
+vector<string> tok(string str, char sep = ' ')
+{
+  stringstream s(str); // Used for breaking words 
+  string word; // to store individual words 
+
+  vector<string> ret;
+
+  while (getline(s, word, sep))
+    ret.push_back(word);
+
+  return ret;
+}
+
 struct Point
 {
   int x{ 0 }, y{ 0 }, z{ 0 };
@@ -101,7 +114,38 @@ struct Point
     return Point{ x + 1, y, z };
   }
 
+  static Point Parse(string stringValue)
+  {
+    Point ret;
+    if (stringValue.empty())
+      return ret;
+
+    if (stringValue[0] == '(')
+      stringValue.erase(begin(stringValue));
+    if (stringValue.back() == ')')
+      stringValue.erase(end(stringValue) - 1);
+
+    auto tokens = tok(stringValue, ',');
+    assert(tokens.size() >= 2);
+    ret.x = stoi(tokens[0]);
+    ret.y = stoi(tokens[1]);
+    if (tokens.size() > 2)
+      ret.z = stoi(tokens[2]);
+
+    return ret;
+  }
+
   string ToString() const
+  {
+    string s = "(";
+    s += to_string(x);
+    s += ", ";
+    s += to_string(y);
+    s += ")";
+    return s;
+  }
+
+  string ToString3() const
   {
     string s = "(";
     s += to_string(x);
@@ -371,19 +415,6 @@ vector<string> rff(string filePath, function<void(string &)> func = nullptr)
     if (func != nullptr) func(s);
     ret.push_back(s);
   }
-
-  return ret;
-}
-
-vector<string> tok(string str, char sep = ' ')
-{
-  stringstream s(str); // Used for breaking words 
-  string word; // to store individual words 
-
-  vector<string> ret;
-
-  while (getline(s, word, sep))
-    ret.push_back(word);
 
   return ret;
 }
