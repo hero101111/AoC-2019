@@ -252,7 +252,6 @@ public:
 
     auto answer = FindSolution(crtG, { position[0] }, { remainingKeys });
 
-    //assert(answer == 4204);
     return std::to_string(answer);
   }
 
@@ -299,7 +298,6 @@ public:
     }
 
     auto answer = FindSolution(*mapGraph, position, remainingKeys);
-    //assert(answer == 1682);
     return std::to_string(answer);
   }
 };

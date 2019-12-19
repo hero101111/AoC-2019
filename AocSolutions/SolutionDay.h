@@ -18,4 +18,6 @@ public:
   virtual string Part2() = 0;
 
   virtual ~ISolutionDay() { verbose.close(); };
+
+  virtual bool Test() { return true; }
 };
