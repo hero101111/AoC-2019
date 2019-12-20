@@ -367,7 +367,7 @@ struct Point
 
 ostream& operator << (ostream& out, const Point& c)
 {
-  out << c.ToString() << "\t\t";
+  out << c.ToString3() << "\t\t";
   return out;
 }
 
@@ -565,7 +565,7 @@ public:
     return ret;
   }
 
-  void fromfile(string filepath, function<T(char)> readFunc)
+  void fromfile(string filepath, function<T(char)> readFunc = nullptr)
   {
     vector<string> lines = rff(filepath);
     int crtLine = 0;
@@ -573,7 +573,7 @@ public:
     {
       int crtChar = 0;
       for (char c : line)
-        (*this)[{crtChar++, crtLine}] = readFunc(c);
+        (*this)[{crtChar++, crtLine}] = readFunc ? readFunc(c) : c;
 
       ++crtLine;
     }
@@ -639,6 +639,14 @@ struct objmap
       if (m.second == index)
         return m.first;
     return T();
+  }
+
+  vector<T> translate(const vector<int> & path)
+  {
+    vector<Point> ret;
+    for (auto p : path)
+      ret.push_back(translate(p));
+    return ret;
   }
 };
 
