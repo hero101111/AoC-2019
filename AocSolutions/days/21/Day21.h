@@ -1,35 +1,59 @@
 #pragma once
 
 #include "SolutionDay.h"
-#include "util/util.h"
-#include "util/IntComputer.h"
 
 class Day21 : public ISolutionDay
 {
-private:
-
-  vector<string>  mdata;
-
 public:
-
-  Day21() { }
 
   ~Day21() override { }
 
-  void ReadData()
+  string DoWork(string inputFile)
   {
-    mdata = rff(KINPUT "21\\input.txt");
+    ifstream inputRobot(inputFile);
+    string crtInputLine;
+    getline(inputRobot, crtInputLine);
+
+    IntComputer cpu{ rff(KINPUT "21\\input.txt")[0] };
+
+    bool eol = false;
+    cpu.mInputFunction = [&]()
+    {
+      if (eol)
+      {
+        eol = false;
+        return 10;
+      }
+
+      if (crtInputLine.empty() && !inputRobot.eof())
+        getline(inputRobot, crtInputLine);
+
+      int c = crtInputLine.front();
+      crtInputLine.erase(begin(crtInputLine));
+
+      if (crtInputLine.empty())
+        eol = true;
+      char cc = c;
+      return c;
+    };
+
+    int result = 0;
+    cpu.mOutputCallback = [&](int output) {
+      result = output;
+    };
+
+    cpu.Execute();
+
+    return std::to_string(result);
   }
 
   string Part1() override
   {
-    int ret = 211;
-    return std::to_string(ret);
+    return DoWork(KINPUT "21\\robo_part1.txt");
   }
 
   string Part2() override
   {
-    int ret = 212;
-    return std::to_string(ret);
+    return DoWork(KINPUT "21\\robo_part2.txt");
   }
 };
