@@ -685,8 +685,9 @@ bool contains(const T& c, const V& v)
 template<class T, class S>
 void printvec(const vector<T>& v, S & stream)
 {
+  stream << endl;
   for (auto& el : v)
-    stream << el;
+    stream << el << ", ";
 }
 
 template<class T, class S>
@@ -968,6 +969,57 @@ long long lcm(long long a, long long b)
 {
   int g = gcd(a, b);
   return g ? (a / g * b) : 0;
+}
+
+long long modInverse(long long a, long long m)
+{
+  long long m0 = m;
+  long long y = 0, x = 1;
+
+  if (m == 1)
+    return 0;
+
+  while (a > 1)
+  {
+    // q is quotient 
+    long long q = a / m;
+    long long t = m;
+
+    // m is remainder now, process same as 
+    // Euclid's algo 
+    m = a % m, a = t;
+    t = y;
+
+    // Update y and x 
+    y = x - q * y;
+    x = t;
+  }
+
+  // Make x positive 
+  if (x < 0)
+    x += m0;
+
+  return x;
+}
+/* Iterative Function to calculate (x^y)%p in O(log y) */
+long long power(long long x, long long y, long long p)
+{
+  long long res = 1;      // Initialize result 
+
+  x = x % p;  // Update x if it is more than or  
+              // equal to p 
+
+  while (y > 0)
+  {
+    // If y is odd, multiply x with result 
+    if (y & 1)
+      res = (res * x) % p;
+
+    // y must be even now 
+    y = y >> 1; // y = y/2 
+    x = (x * x) % p;
+  }
+  return res;
 }
 
 
