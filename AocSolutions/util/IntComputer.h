@@ -12,6 +12,7 @@ public:
 
   function<long long(void)> mInputFunction{ nullptr };
   function<void(long long)> mOutputCallback{ nullptr };
+  function<bool(long long)> mSuspendOnInputPredicate{ nullptr };
 
 private:
   typedef unordered_map<long long, long long> DT;
@@ -19,12 +20,14 @@ private:
   DT            memory;
   long long     relBase         {   0    };
   bool          mHalted         {  false };
+  long long     mIP{ 0 };
 
-  long long     mIP             {   0    } ;
 
   vector<string> mInitialInstructions;
 
 public:
+
+  IntComputer() {}
 
   IntComputer(string instructions) 
   {
@@ -117,9 +120,18 @@ public:
       {
         auto inputToUse = mInput;
         if (mInputFunction != nullptr)
+        {
           inputToUse = mInputFunction();
-
+          mInput = inputToUse;
+        }
+       
         writeMem(inputToUse);
+
+        if (mSuspendOnInputPredicate != nullptr && mSuspendOnInputPredicate(inputToUse))
+        {
+          mIP = ++crtIp;
+          return numeric_limits<long long>::max();
+        }
       }
       else if (instr == 4)
       {

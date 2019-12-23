@@ -39,7 +39,7 @@ int main(int argc, char** argv)
   REG_DAY(14);  REG_DAY(15);  REG_DAY(16);  REG_DAY(17); REG_DAY(18); REG_DAY(19);
   REG_DAY(20);  REG_DAY(21);  REG_DAY(22);  REG_DAY(23); REG_DAY(24); REG_DAY(25);
  
-  int DAY  = 22;
+  int DAY  = 23;
   int PART = 2;
 
   ///////////////////////////////

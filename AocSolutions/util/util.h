@@ -34,13 +34,13 @@ vector<string> tok(string str, char sep = ' ')
 
 struct Point
 {
-  int x{ 0 }, y{ 0 }, z{ 0 };
+  long long x{ 0 }, y{ 0 }, z{ 0 };
 
   Point() {}
-  Point(int ax, int ay, int az = 0) : x(ax), y(ay), z(az) { }
+  Point(long long ax, long long ay, long long az = 0) : x(ax), y(ay), z(az) { }
   Point(string ax, string ay, string az = "0") : x(stoi(ax)), y(stoi(ay)), z(stoi(az)) { }
 
-  int& operator[](int index)
+  long long & operator[](int index)
   {
     if (index == 0)
       return x;

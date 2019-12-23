@@ -56,7 +56,7 @@ public:
     }
   }
 
-  void SimulateGravity(int m1, int m2, int& v1, int& v2)
+  void SimulateGravity(int m1, int m2, long long & v1, long long & v2)
   {
     if (m2 > m1)
     {
