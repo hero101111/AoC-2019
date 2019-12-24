@@ -66,6 +66,20 @@ struct DynMapWorld : enable_shared_from_this<DynMapWorld>
     return ret;
   }
 
+  void Print(string filePath)
+  {
+    doingWork = true;
+    if (outer && !outer->doingWork)
+      outer->Print(filePath);
+
+    if (crtState.for_each([](int c) { return c == '#'; }))
+      crtState.printf(filePath, ' ', true, "\n");
+
+    if (inner && !inner->doingWork)
+      inner->Print(filePath);
+    doingWork = false;
+  }
+
   int AdjacentCount(Point p)
   {
     int ret = 0;
@@ -272,8 +286,12 @@ public:
     int CycleCount = 200;
 
     for (int i : rangeint(1, CycleCount))
+    {
       world->SimulateOneMinute();
 
+      //string logPath = "c:\\aoc-2019\\log-step-"s + to_string(i) + ".txt";
+      //world->Print(logPath);
+    }
     return std::to_string(world->CountBugs());
   }
 };
