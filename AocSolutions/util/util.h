@@ -473,7 +473,34 @@ public:
   int min_x = numeric_limits<int>::max();
   int min_y = numeric_limits<int>::max();
 
+  DynamicMap<T>& operator =(const DynamicMap<T>& other)
+  {
+    max_y = other.max_y;
+    max_x = other.max_x;
+    min_x = other.min_x;
+    min_y = other.min_y;
+
+    data = other.data;
+
+    return *this;
+  }
+
   bool at(Point p, T * aOutVal)
+  {
+    auto xData = data.find(p.x);
+    if (xData == end(data))
+      return false;
+    auto yData = xData->second.find(p.y);
+    if (yData == end(xData->second))
+      return false;
+
+    if (aOutVal != nullptr)
+      *aOutVal = yData->second;
+
+    return true;
+  }
+
+  bool at(Point p,  T* const aOutVal) const
   {
     auto xData = data.find(p.x);
     if (xData == end(data))
@@ -519,6 +546,37 @@ public:
     if (!at(p, nullptr))
      set(p, T());
     return data[p.x][p.y];
+  }
+
+  bool operator == (const DynamicMap<T>& other) const
+  {
+    if (min_x != other.min_x)
+      return false;
+    if (min_y != other.min_y)
+      return false;
+    if (max_x != other.max_x)
+      return false;
+    if (max_y != other.max_y)
+      return false;
+
+    for (long long x : range_x())
+    {
+      for (long long y : range_y())
+      {
+        Point p{ x, y };
+        T myV, theirV;
+
+        bool IHave = at(p, &myV);
+        bool theyHave = other.at(p, &theirV);
+
+        if (IHave != theyHave)
+          return false;
+
+        if (myV != theirV)
+          return false;
+      }
+    }
+    return true;
   }
 
   vector<int> range_x() const
@@ -597,7 +655,7 @@ public:
         if (!at({ i, j }, &data))
           data = empty;
 
-        fOut << data << " ";
+        fOut << data;
       }
       fOut << endl;
     }
